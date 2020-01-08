@@ -1,0 +1,544 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\!\!\!#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1)} #2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+
+% Multilinear Algebra
+\newcommand{\Lsym}{\L}
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\rotatebox[origin=c]{-90}{$\circlearrowright$}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+
+% Convex Optimization
+\newcommand{\sectionSymbol}{\S}
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\uSym}{\u}
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\newcommand{\bSym}{\b}
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\newcommand{\iSym}{\i}
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+\author{Thomas Cohn}
+\title{Math 493 Lecture 14}
+\date{10/23/19} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\renewcommand{\thesection}{\Roman{section}} 
+
+\subsection*{Midterm Review}
+
+\par\noindent
+Topics:
+\begin{enumerate}
+	\item Group Theory
+	\item Linear Algebra
+	\item Rigid Motions of the Plane
+	\item Group Actions
+\end{enumerate}
+
+\section{Group Theory}
+
+\par\noindent
+The main focus of this is groups themselves, group homomorphisms, and group isomorphisms.\n
+
+\ex{
+	The most important groups:
+	\begin{itemize}[leftmargin=3\parindent]
+		\item The trivial group
+		\item $\Z/n\Z$ or $\Z$ (cyclic groups)
+		\item $S_{n}$ the symmetric group and $A_{n}$ the alternating group
+		\item $\GL_{n}(F)$ the general linear group over field $F$
+		\item $D_{n}$ the dihedral group of order $2n$
+	\end{itemize}
+}
+
+\subsection*{Constructing Groups}
+
+\ex{
+	$G$ any group, the group of automorphisms $\Aut(G)$\n
+	$\exists\gamma:G\to\Aut(G)$ a group homomorphism where $g\mapsto\gamma_{g}$ where $\gamma_{g}(h)=ghg\inv$ (conjugation by $g$). The $\gamma_{g}$ are inner automorphisms.\n
+	$\ker\gamma=Z(G)$, the center of $G$\n
+	$\im\gamma=\operatorname{Inn}(G)$, the group of inner automorphisms of $G$, is a normal subgroup of $\Aut(G)$.\n
+}
+
+\par\noindent
+Given groups $G$ and $H$, we can build a new group $G\times{}H$ called the direct product of $G$ and $H$, with group law $(g,h)(g',h')\mapsto(gg',hh')$.\n
+
+\par\noindent
+If $N\subseteq{}G$ is a normal subgroup, we can form the quotient gruop $G/N$. Elements are left cosets (or right cosets, because $N$ is normal) $gN$. We have the projection map $\pi:G\to{}G/N$, a surjective group homomorphism where $g\mapsto{}gN$. $\ker(\pi)=N$. From $\pi$, we have the mapping property: given a group $H$, we have a bijection
+\[
+	\isom{\set{\ptxt{homomorphisms }G/N\overset{\bar{f}}{\to}H}}{\set{\ptxt{homomorphisms }G\overset{f}{\to}H\ptxt{ \st{} }N\subseteq\ker(f)}}{\bar{f}}{f}
+\]
+\begin{center}
+	\begin{tikzcd}
+		G \drar{f} \dar[swap]{\pi} & \\
+		G/N \rar[pos=0.4]{\bar{f}} & H
+	\end{tikzcd}
+\end{center}
+
+\par\noindent
+If $G$ is any group, $S\subset{}G$ a set of elements in $G$, then the subgroup of $G$ generated by $S$ is $\generated{S}$. We have two perspectives of this:\n
+\textit{Top-Down:} $\generated{S}$ is the intersection of all subgroups of $G$ that contain $S$.\n
+\textit{Bottom-Up:} $\generated{S}$ is the set of finite products of elements of $S$ and $S\inv$.\n
+
+\subsection*{Results about Groups}
+
+\thm{
+	(First Isomorphism Theorem) If $f:G\to{}H$ is a surjective group homomorphisms, then via the mapping property, $f$ induces an isomorphism $\bar{f}:G/\ker{}f\overset{\sim}{\to}\im{}f=H$.\n
+}
+
+\begin{center}
+	\begin{tikzcd}
+		G \rar{f} \dar{\pi} & H\\
+		G/\ker{}f \urar[sloped,pos=0.6]{\sim}[swap,pos=0.4,below]{\bar{f}}
+	\end{tikzcd}
+\end{center}
+
+\thm{
+	(Correspondence Theorem) Let $N\subseteq{}G$ a normal subgroup, $\pi:G\to{}G/N$ the quotient map. We have
+	\[
+		\isom{\set{\ptxt{subgroups of }G/N}}{\set{\ptxt{subgroups of }G\ptxt{ containing }N}}{H}{\pi\inv(H)}
+	\]
+}
+
+\par\noindent
+Let $p$ be prime. Groups of small order:
+\begin{itemize}
+	\item Every group of order $p$ is isomorphic to $\Z/p\Z$.
+	\item Every group of order $p^{2}$ is abelian and isomorphic to $\Z/p\Z\times\Z/p\Z\cong\Z/p^{2}\Z$.
+	\item There are $2$ groups of order $6$: $\Z/6\Z$ and $S_{3}=D_{3}$.
+\end{itemize}
+
+\section{Linear Algebra}
+
+\par\noindent
+Fields\n
+
+\ex{
+	\begin{itemize}
+		\item $\R$
+		\item $\C$
+		\item $\F_{p}$
+		\item $\Q$
+	\end{itemize}
+}
+
+\par\noindent
+Some important things:
+\begin{itemize}
+	\item Vector spaces and linear transformations
+	\item Span, linear independence. Both together implies a basis.
+	\item Every vector space has a basis. (Thank you axiom of choice!)
+	\item A vector space is finite dimensional if it can be spanned by finitely many elements.
+	\item If $\dim(V)=n$, choosing a basis is equivalent to choosing an isomoprhism $V\overset{\sim}{\to}F^{n}$.
+\end{itemize}
+
+\par\noindent
+We have several ways of constructing vector spaces:
+\begin{itemize}
+	\item Direct sum
+	\item Quotient vector spaces
+	\item Span
+\end{itemize}
+
+\thm{
+	(Rank-Nullity) Given $T:V\to{}W$ with $V$ finite-dimensional, then
+	\[
+		\dim{}v=\dim(\im(T))+\dim(\ker(T))=\rank(T)+\nullity(T)
+	\]
+}
+
+\subsection*{Eigen-stuff}
+
+\par\noindent
+Let $T:V\to{}V$ be a linear operator, with $V$ finite dimensional.
+\begin{itemize}
+	\item $v\in{}V\cut\set{0}$ is an eigenvector for $T$ if $\exists\lambda$ \st{} $Tv=\lambda{}v$.
+	\item The characteristic polynomial of $T$ is $\det(T-tI)$.
+	\item We say $T$ is diagonalizable if there is a basis for $V$ \st{} the matrix for $T$ is diagonal.
+	\item $T$ is diagonalizable iff $V$ has a basis of eigenvectors.
+\end{itemize}
+
+\section{Rigid Motions of the Plane}
+
+\par\noindent
+$M$ is the group of rigid motions of the plane $P$.\n
+
+\par\noindent
+We can look at the structure of $M$:
+\begin{itemize}
+	\item Elements $\rho_{\theta}$ rotation, $t_{a}$ translation, $r$ reflection
+	\item $T$ is the group of translations, and is a normal subgroup.
+	\item $\operatorname{O}(2)$ is the subgroup of $M$ fixing the origin, generated by $\rho_{\theta}$ and $r$.
+\end{itemize}
+
+\begin{center}
+	\begin{tikzcd}
+		\operatorname{O}(2) \rar{\Id} \arrow[bend right=30]{rr}[swap]{\sim} & M \rar{\pi} & M/T
+	\end{tikzcd}
+\end{center}
+
+\par\noindent
+Every finite subgroup of $M$ is conjugate to $\Z/n\Z$ or $D_{n}$ inside of $\operatorname{O}(2)$.\n
+
+\par\noindent
+Given a subset $S$ of $P$ (i.e. a plane figure), its symmetry group is the subgroup of $M$ preserving $S$.
+
+\section{Group Actions}
+
+\begin{itemize}
+	\item $G$-sets, homomorphisms/isomorphisms
+	\item Orbits and stabilizers. Let $X$ be a $G$-set, $x\in{}X$. Then
+	\begin{itemize}
+		\item Orbit $O_{x}=\set{gx\mid{}g\in{}G}$
+		\item Stabilizer $G_{x}=\set{g\in{}G\mid{}gx=x}$
+	\end{itemize}
+\end{itemize}
+
+\par\noindent
+Let $X$ be a $G$-set. The orbits partition $X$ into disjoint, transitive $G$-sets.\n
+
+\par\noindent
+Every transitive $G$ set is isomorphic to $G/H$ for some subgroup $H$ of $G$.\n
+
+\par\noindent
+Counting formula: let $X$ be a $G$-set with $G$ finite, and $x\in{}X$. Then $\#O_{x}\cdot\#G_{x}=\#G$.
+
+\end{document}

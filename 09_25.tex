@@ -1,0 +1,529 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+
+\usetikzlibrary{bayesnet}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\!\!\!#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1)} #2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+
+% Multilinear Algebra
+\newcommand{\Lsym}{\L}
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+
+% Convex Optimization
+\newcommand{\sectionSymbol}{\S}
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\uSym}{\u}
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\newcommand{\bSym}{\b}
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\newcommand{\iSym}{\i}
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+\author{Thomas Cohn}
+\title{Math 493 Lecture 7}
+\date{9/25/19} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\subsection*{Direct Sums}
+
+\par\noindent
+Let $V$ be a vector space, $W_{1},\ldots,W_{r}\subseteq{}V$ subspaces.\n
+
+\defn{
+	$W_{1},\ldots,W_{r}$ are \textbf{independent} if $w_{1}=\ldots+w_{r}=0$, for $w_{i}\in{}W_{i}$, then $w_{i}=0$.\n
+}
+
+\defn{
+	We let $W_{1}+\cdots+W_{r}=\set{w_{1}=\cdots+w_{r}\mid{}w_{i}\in{}W_{i}}$.\n
+}
+
+\par\noindent
+Observations:
+\begin{enumerate}
+	\item $W_{1}+\cdots+W_{r}$ is a subspace.
+	\item Suppose $v_{1},\ldots,v_{r}\in{}V$ are nonzero. Put $W_{i}=\vspan(v_{i})=\set{av_{i}\mid{}a\in{}K}$. Then $W_{1},\ldots,W_{r}$ are independent if and only if $v_{1},\ldots,v_{r}$ are linearly independent. Additionally, $W_{1}+\cdots+W_{r}=\vspan(v_{1},\ldots,v_{r})$.
+	\item $r=2$: $W_{1}$ and $W_{2}$ are independent if and only if $W_{1}\cap{}W_{2}=\set{0}$.\n
+	Reason: say $W_{1}$ and $W_{2}$ are independent, $v\in{}W_{1}\cap{}W_{2}$. Then $v+(-v)=0$, and we have $v\in{}W_{1}$, $-v\in{}W_{2}$. So $v=0$.
+\end{enumerate}
+
+\defn{
+	$V$ is the (\textbf{internal}) \textbf{direct sum} of $W_{1},\ldots,W_{r}$, written $V=W_{1}\oplus\cdots\oplus{}W_{r}$ if $W_{1},\ldots,W_{r}$ are independent and $W_{1}+\cdots+W_{r}=V$.\n
+}
+
+\par\noindent
+Observe: $V=W_{1}\oplus\cdots\oplus{}W_{r}$ if and only if every $v\in{}V$ can be written uniquely in the form $w_{1}=\cdots+w_{r}$, with $w_{i}\in{}W_{i}$.\n
+Reason: suppose $v=w_{1}+w_{2}+\cdots+w_{r}=w_{1}'+w_{2}'+\cdots+w_{r}'$. Then $0=(w_{1}-w_{1}')+\cdots+(w_{r}-w_{r}')$ (each $w_{i}-w_{i}'\in{}W_{i}$). Because the $W_{i}$ are independent, we must have $w_{i}-w_{i}'=0$, so $w_{i}=w_{i}'$.\n
+
+\ex{
+	$K=\C$, $V=M_{n\times{}n}(\C)$. $W_{1}=\set{m\in{}V\mid{}\tpose{}m=m}$, $W_{2}=\set{m\in{}V\mid{}\tpose{}m=-m}$.\n
+	Claim: $V=W_{1}\oplus{}W_{2}$.
+	\begin{itemize}
+		\item $V=W_{1}+W_{2}$: Given $m\in{}V$, $m=\paren{\frac{m+\tpose{}m}{2}}+\paren{\frac{m-\tpose{}m}{2}}$. $\frac{m+\tpose{}m}{2}\in{}W_{1}$ and $\frac{m-\tpose{}m}{2}\in{}W_{2}$.
+		\item $W_{1}\cap{}W_{2}=\set{0}$. If $m\in{}W_{1}\cap{}W_{2}$, then $m=\tpose{}m=-\tpose{}m$. So $m=0$.
+	\end{itemize}
+}
+
+\par\noindent
+Let $V$ be a vector space, and $U\subseteq{}V$ a subspace.\n
+
+\defn{
+	A subspace $W$ of $V$ is called a \textbf{complement} to $U$ if $V=U\oplus{}W$.\n
+}
+
+\prop{
+	Every subspace $U$ has at least one complement.\n
+	Proof: Pick a basis $S$ (possibly infinite) of $U$. Extend $S$ to a basis $T$ of $V$. Define $W=\vspan(T\cut{}S)$. Claim that $V=U\oplus{}W$.\n
+	Well, $V=U+W$. Let $v\in{}V$. Write $v=a_{1}x_{1}+\cdots+a_{n}v_{n}$, $a_{i}\in{}K$, $x_{i}\in{}T$. Assume $x_{i}\in{}S$ for $1\le{}i\le{}k$, $x_{i}\in{}T\cut{}S$ for $k+1\le{}i\le{}n$.\n
+	Now, independence. Suppose $u+w=0$, $u\in{}U$, $w\in{}W$. Write
+	\begin{align*}
+		& u=a_{1}x_{1}+\cdots+a_{n}x_{n}\quad(a_{i}\in{}K,x_{i}\in{}S)\\
+		& w=b_{1}y_{1}+\cdots+b_{m}y_{m}\quad(b_{i}\in{}K,y_{i}\in{}T\cut{}S)
+	\end{align*}
+	So
+	\[
+		u+w=a_{1}x_{1}=\cdots+a_{n}x_{n}+b_{1}y_{1}=\cdots+b_{m}y_{m}
+	\]
+	$T$ is a basis, and $v_{i}\in{}T$, $w_{i}\in{}T$, so $a_{i}=0$ and $b_{j}=0$, $\forall{}i,j$. So $u=0$ and $w=0$.\proven
+}
+
+\ex{
+	$V=\C^{2},U=\vspan\paren{\smallBMatrix{1\\ 0}}=\set{\smallBMatrix{a\\ 0}\mid{}a\in\C}$.\n
+	Claim: if $w=\smallBMatrix{b\\ 1}$, for any $b\in\C$, then $W=\vspan(w)$ is a complement of $U$.\n
+	Reason: $\smallBMatrix{1\\ 0}$, $\smallBMatrix{b\\ 1}$ are a basis for $\C^{2}$.\n
+	\n
+	In fact, any line other than the $x$-axis is a complement to $U$.\n
+}
+
+\prop{
+	$V$ is a vector space, $U,W\subseteq{}V$ subspaces. Let $\pi:V\to{}V/U$ be the quotient map. Then $W$ is complement to $U$ if $\pi|_{W}:W\to{}V/U$ is an isomorphism.\n
+	Proof: $\ker(\pi|_{W})=\set{w\in{}W\mid\pi(w)=0}=\set{w\in{}W\mid{}w\in\ker(\pi)}=W\cap\ker(\pi)=W\cap{}U$.\n
+	$\pi|_{W}$ is injective $\Leftrightarrow{}W\cap{}U=\set{0}\Leftrightarrow{}W,V$ independent.\n
+	\n
+	Suppose $\bar{v}\in\im(\pi|_{W})$, $\bar{v}=\bar{w}$ where $w\in{}W$. So $\overline{v-w}=0$, thus, $v-w\in{}U$. $v=w+u$, with $w\in{}W$ and $u\in{}U$. Conversely, if $v=w+u$, $w\in{}W$, $u\in{}U$, then $\bar{v}=\bar{w}$ because $\bar{u}=0$.\n
+	\n
+	$\im(\pi|_{W})=\set{\bar{v}\mid{}v\in{}U+W}$. So $\pi|_{W}$ is surjective if and only if $U+W=V$.\proven
+}
+
+\cor{
+	Suppose $V$ is finite dimensional, and $U,W$ are complements. Then $\dim{}V=\dim{}U+\dim{}W$.\n
+	Proof: $\dim{}V=\dim{}U+\dim{}V/U=\dim{}U+\dim{}W$, because $W\cong{}V/U$.\proven
+}
+
+\subsection*{External Direct Sums}
+
+\par\noindent
+Let $U$ and $W$ be vector spaces over $K$.
+
+\defn{
+	The (\textbf{external}) \textbf{direct sum} $U\oplus{}W$ is the set of all ordered pairs $(u,w)$ with $u\in{}U,w\in{}W$.\n
+}
+
+\par\noindent The external direct sum is a vector space:
+\begin{itemize}
+	\item $(u,w)+(u',w')=(u+u',w+w')$
+	\item $a(u,v)=(au,av)$
+\end{itemize}
+
+\par\noindent
+Let $\bar{u}=\set{(u,0)\mid{}u\in{}U}\subseteq{}U\oplus{}W$ and $\bar{w}=\set{(0,w)\mid{}w\in{}W}\subseteq{}U\oplus{}W$.\n
+Then $U\oplus{}W$ is the internal direct sum of $\bar{u}$ and $\bar{w}$.\n
+
+\subsection*{Linear Transformations}
+
+\par\noindent
+Let $T:V\to{}W$ be a linear transformation.\n
+
+\defn{
+	$\ker(T)=\set{v\in{}V\mid{}T(v)=0}$.\n
+}
+
+\defn{
+	$\im(T)=\set{w\in{}W\mid{}\exists{}v\in{}V\ptxt{ \st{} }T(v)=w}$.\n
+}
+
+\par\noindent
+Facts:
+\begin{enumerate}
+	\item $\ker(T)$ is a subspace of $V$.
+	\item $\im(T)$ is a subspace of $W$.
+	\item $T$ is injective if and only if $\ker(T)=\set{0}$.
+	\item First isomorphism theorem holds: $T$ induces an isomorphism $V/\ker(T)\to\im(T)$.
+\end{enumerate}
+
+\defn{
+	Suppose $V$ is a finite dimensional vector space. The \textbf{rank} of $T$ is $\dim(\im(T))$. The \textbf{nullity} of $T$ is $\dim(\ker(T))$.\n
+}
+
+\thm{
+	(Rank-Nullity) $\rank(T)+\operatorname{nullity}(T)=\dim{}V$.\n
+	Proof: $\dim{}V=\dim{}V/\ker(T)+\dim(\ker(T))=\dim(\im(T))+\dim(\ker(T))$, by the first isomorphism theorem.\proven
+}
+
+\ex{
+	$V=P_{\le{}d}=\set{\ptxt{polynomials of degree }\le{}d}$, $K=\C$.\n
+	$\map{T=V}{V}{f}{\frac{df}{dx}}$ is a linear transformation.\n
+	Then $\dim{}P_{\le{}d}=\operatorname{nullity}(T)+\rank(T)=1+d=d+1$.\n
+	Note: if we work over $\F_{p}$, then $\frac{d}{dx}(x^{p})=px^{p-1}=0$, so nullity can be greater than $1$.\n
+}
+
+\par\noindent
+Let $A$ be an $n\times{}m$ matrix (i.e. $n$ rows, $m$ columns) over $K$. Define a linear transformation $T_{A}:K^{m}\to{}K^{n}$ by $T_{A}(v)=Av$.\n
+
+\prop{
+	Every linear transformation $T:K^{m}\to{}K^{n}$ has the form $T_{A}$ for a unique matrix $A$.\n
+	Proof: write
+	\[
+		A=\begin{bmatrix}
+			| & & |\\
+			v_{1} & \cdots & v_{m}\\
+			| & & |
+		\end{bmatrix}
+	\]
+	with $v_{i}\in{}K^{n}$. Then $T_{A}(e_{i})=v_{i}$.\n
+	If $T_{A}=T_{B}$, write
+	\[
+		B=\begin{bmatrix}
+			| & & |\\
+			w_{1} & \cdots & w_{m}\\
+			| & & |
+		\end{bmatrix}
+	\]
+	$T_{A}(e_{i})=T_{B}(e_{i})$, so $v_{i}=w_{i}$. Thus, $A=B$.\n
+	\n
+	Given an arbitrary $T$, put $v_{i}=T(e_{i})$ and
+	\[
+		A=\begin{bmatrix}
+			| & & |\\
+			v_{1} & \cdots & v_{m}\\
+			| & & |
+		\end{bmatrix}
+	\]
+	Then $T(e_{i})=v_{i}=T_{A}(e_{i})$, so $T=T_{A}$.\n
+	Let $v=\sum{}a_{i}e_{i}$. Then $T(v)=T(\sum{}a_{i}e_{i})=\sum{}a_{i}T(e_{i})=\sum{}a_{i}T_{A}(e_{i})=T_{A}(\sum{}a_{i}e_{i})=T_{A}(v)$.\proven
+}
+
+\end{document}

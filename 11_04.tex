@@ -1,0 +1,526 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\!\!\!#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1) }\!\!\!#2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\up\par\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+
+% Multilinear Algebra
+\newcommand{\Lsym}{\L}
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\reflectbox{\rotatebox[origin=c]{-90}{$\circlearrowright$}}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\nsubgp}{\vartriangleleft}
+\DeclareMathOperator{\notnsubgp}{\ntriangleleft}
+\newcommand{\presentation}[2]{\left<#1\;\middle|\;#2\right>}
+
+% Convex Optimization
+\newcommand{\sectionSymbol}{\S}
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+\newcommand{\minimizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\end{array}}
+\newcommand{\maximizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\end{array}}
+\newcommand{\minimizationUnconstrained}[1]{\minimizeOverUnconstrained{}{#1}}
+\newcommand{\maximizationUnconstrained}[1]{\maximizeOverUnconstrained{}{#1}}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\uSym}{\u}
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\newcommand{\bSym}{\b}
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\newcommand{\iSym}{\i}
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+\author{Thomas Cohn}
+\title{Math 493 Lecture 17}
+\date{11/4/19} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\subsection*{Group Presentations}
+
+\par\noindent
+$D_{n}$ (dihedral group) generated by $a$ (rotation by $\frac{2\pi}{n}$) and $b$ (reflection across $x$-axis).\n
+Relations: $a^{n}=1$, $b^{2}=1$, $bab\inv=a\inv$.\n
+
+\par\noindent
+$M$ (rigid motions of the plane) generated by $t_{a}$ (translation by $a$), $\rho_{\theta}$ (rotation by $\theta$), $r$ (reflection across $x$-axis).\n
+Relations: lots (see notes from lecture 10/2).\n
+
+\subsection*{Free Groups}
+
+\defn{
+	A \textbf{free group} has some set of generators, $S$, with no relations.\n
+}
+
+\ex{
+	$\Z$, $S=\set{1}$. $\Z$ is the free group with one generator.\n
+}
+
+\par\noindent
+Fix set $S$ (elements are symbols). Define $S'=\set{x,x\inv:x\in{}S}$ (note: $x\inv$ is a new formal symbol). Let $W'$ be the set of words in $S'$ (a word is a finite string $x_{1}x_{2}\cdots{}x_{n}$, $x_{j}\in{}S'$). Allow the empty word ($n=0$).\n
+
+\defn{
+	A word $w\in{}W'$ is called \textbf{reduced} if there are no $2$ adjacent letters of the form $xx\inv$ (for $x\in{}S'$).\n
+}
+
+\par\noindent
+Note: for $x\in{}S$, $x\inv$ is an element of $S'$. $(x\inv)\inv$ is taken to mean $x$.\n
+
+\defn{
+	Starting with any word, we can cancel $xx\inv$ in it to get a reduced word. This is called the \textbf{reduced form} of a word.\n
+}
+
+\ex{
+	$S=\set{a,b,c}$, $S'=\set{a,a\inv,b,b\inv,c,c\inv}$. Consider $W=bacc\inv{}a\inv{}a$ ($W$ is not reduced). Go to reduced form:
+	\[
+		\begin{array}{l}
+			ba(cc\inv{})a\inv{}a\to{}ba(a\inv{}a)\to{}ba\\
+			ba(cc\inv{})a\inv{}a\to{}b(aa\inv{})a\to{}ba
+		\end{array}
+	\]
+	Note that different letters survive, but the reduced form always appears the same.\n
+}
+
+\newpage
+\prop{
+	Let $w$ be a word. Then any two reduced forms of $w$ are equal.\n
+	Proof: Induction on the length of $w$. If $w$ is reduced, there's nothing to prove. So say we have $xx\inv$ in $w$ somewhere. It's enough to show that any reduced form of $w$ can start by canceling this $xx\inv$.\n
+	Consider some reduced form $w_{0}$ of $w$. We have two cases:
+	\begin{enumerate}[leftmargin=4\parindent]
+		\item At some step, we cancel the $xx\inv$ in question. $w=(\ptxt{stuff})xx\inv(\ptxt{more stuff})$. First cancel in $(\ptxt{stuff})$ and $(\ptxt{more stuff})$. Then cancel $xx\inv$. Then cancel more. As the three parts of $w$ are disjoint, we can switch the first two steps.
+		\item Not 1., i.e., we never cancel the $xx\inv$ in question. As $w_{0}$ is reduced, one of $x$ and $x\inv$ must be canceled. WOLOG, $x$ is canceled. Then $w=(\ptxt{stuff})xx\inv(\ptxt{stuff})$. After cancellations, it becomes $(\ptxt{stuff})x\inv{}xx\inv(\ptxt{stuff})$. Cancel $x\inv{}x$, and continue. We get the same result.
+	\end{enumerate}\up\n
+	\proven
+}
+
+\defn{
+	Define an equivalence relation on $W'$ by $w_{i}\sim{}w_{j}$ if their reduced forms are equal.\n
+}
+
+\par\noindent
+$W'$ has a binary operation given by concatenating words: given $w,w'\in{}W'$, $w=x_{1}\cdots{}x_{n}$, $w'=y_{1}\cdots{}y_{m}$, $x_{*},y_{*}\in{}S'$. Let $ww'=x_{1}\cdots{}x_{n}y_{1}\cdots{}y_{m}$. This binary operation is associative, and has the identity element (the empty string). But it does not have inverses -- $xx\inv$ is not the empty word. But obviously, $xx\inv\sim\ptxt{empty word}$.\n
+
+\prop{
+	Given equivalent words $a\sim{}a'$, $b\sim{}b'$, then $ab\sim{}a'b'$.\n
+	Proof: Let $a_{0}$ be the reduced form of $a$ and $a'$, $b_{0}$ the reduced form of $b$ and $b'$. Then $ab\to{}a_{0}b_{0}$ and $a'b'\to{}a_{0}b_{0}$. Let $c$ be the reduced form of $a_{0}b_{0}$. Then $ab\to{}c$, $a'b'\to{}c$, so $ab\sim{}a'b'$.\proven
+}
+
+\par\noindent
+By this proposition, concatenation induces a binary map on $F=W'/\sim$. This is associative and has an identity element, just as the binary operation was. It also has inverses now:
+\[
+	w=x_{1}\cdots{}x_{n},\quad{}w'=x_{n}\inv\cdots{}x_{1}\inv,\quad\Rightarrow\quad{}ww'\sim{}w'w\sim\ptxt{empty word}
+\]
+Thus, $F$ is a group under this composition law.\n
+
+\defn{
+	$F=W'/\sim$ is the free group with generating set $S$.\n
+	Notation: $F_{S}$, $\generated{S}$, and $F_{n}$ if $\#S=n$.\n
+}
+
+\prop{
+	(Mapping Property for Free Groups) Let $S$ be a set, $F=F_{S}$, and $G$ a group. Then
+	\[
+		\set{\ptxt{group homomorphisms}\;F\to{}G}\underset{\Phi}{\overset{\ptxt{restriction}}{\to}}\set{\ptxt{Functions}\;S\to{}G}
+	\]
+	is a bijection. Concretely, if $F=\generated{x_{1},\ldots,x_{n}}$ a free group on $n$ generators, then to give a homomorphism $F\to{}G$, pick $g_{1},\ldots,g_{n}\in{}G$ and $\exists\unique\map{\varphi:F}{G}{x_{i}}{g_{i}}$ group homomorphism.\n
+	Proof: We know $\Phi$ is injective because $S$ generates $F$. Let $f_{0}:S\to{}G$ be given. We need to show $\exists{}f:F\to{}G$ a group homomorphism extending $f_{0}$ (so then $f_{0}=\Phi(f)$, so $\Phi$ is surjective).\n
+	Define $\tilde{f}:W'\to{}G$ by $\tilde{f}(x_{1}\cdots{}x_{n})=f_{0}(x_{1})\cdots{}f_{0}(x_{n})$ for $x_{i}\in{}S'$, (for $x\in{}S$, let $f(x\inv)=f(x)\inv$). It's clear that if $w_{0}$ is the reduced form of $w$, then $\tilde{f}(w_{0})=\tilde{f}(w)$. Thus, $\tilde{f}$ is well-defined on the equivalence classes, i.e., $w\sim{}w'\Rightarrow{}\tilde{f}(w)=\tilde{f}(w')$. So $\tilde{f}$ induces $f:F\to{}G$, and since $\tilde{f}(ww')=\tilde{f}(w)\tilde{f}(w')$, it follows that $f$ is a group homomorphism.\proven
+}
+
+\par\noindent
+Remark: Let $G$ be a group, $S\subset{}G$, $F=\generated{S}$. We have a natural map $F\to{}G$. The image of this map is the subgroup of $G$ generated by $S$. Particularly, $F\to{}G$ is surjective if and only if $S$ generates $G$.\n
+
+\ex{
+	$F_{2}=\generated{x_{1},x_{2}}$. We have a surjection
+	\[
+		\map{f:F_{2}}{D_{n}}{x_{1}}{a\quad\ptxt{rotation}\\ x_{2} & \!\!\!\!\mapsto & \!\!\!\!b\quad\ptxt{reflection}}
+	\]
+	The relations between $a$ and $b$ give elements in the kernel of $f$.
+	\[
+		x_{1}^{n},x_{2}^{2},x_{2}x_{1}x_{2}x_{1}\in\ker(f)
+	\]
+	Because $f$ is surjective, the first isomorphism theorem says $F_{2}/\ker(f)\cong{}D_{n}$.\n
+}
+
+\par\noindent
+Fact: $\ker(f)$ is the smallest normal subgroup generated by our three elements.\n
+
+\defn{
+	Let $S$ be a set, $F=\generated{S}$. Let $R\subset{}F$ (subset). Then the smallest normal subgroup containing $R$, $N$, is the subgroup of $F$ generated by all conjugates of elements of $R$. Let $\generated{S\;|\;R}=F/N$ (the group generated by $S$ with relations $R$). If $G$ is a group, a \textbf{presentation} of $G$ is an isomorphism $G\cong\generated{S\;|\;R}$ for some $S$ and $R$.\n
+}
+
+\ex{
+	$D_{n}\cong\generated{x_{1},x_{2}\;|\;x_{1}^{n},x_{2}^{2},x_{1}x_{2}x_{1}x_{2}}$. This is a presentation. We will prove this soon.\n
+}
+
+\prop{
+	(Mapping Property) Given $S$ set, $F=F_{S}$, $R\subset{}F$, $G$ a group, we have a bijection.
+	\[
+		\set{\ptxt{group homomorphisms}\;\generated{S\;|\;R}\to{}G}\underset{\Phi}{\overset{\sim}{\to}}\set{\ptxt{functions}\;S\to{}G\;\ptxt{with}\;R\mapsto\set{\id}}
+	\]
+	Proof: Given a homomorphism $f:\presentation{S}{R}\to{}G$, we get a composition $F\to\presentation{S}{R}\overset{f}{\to}G$ (recall: $\presentation{S}{R}=F/N$, where $N$ is the smallest normal subgroup containing $R$). This sends everything in $R$ to $1\in{}G$, so $\Phi$ is well-defined.\n
+	Also, $\Phi$ is injective, as $S$ generates $\presentation{S}{R}$.\n
+	Suppose $f_{0}:S\to{}G$ \st{} $f:F\to{}G$ is the corresponding group homomorphism. Then $f:R\to{}1$, because $R\subseteq\ker(f)\Rightarrow{}N\subseteq\ker(f)$. So we have
+	\begin{center}
+		\begin{tikzcd}[ampersand replacement=\&]
+			F \drar{f} \dar[swap]{f_{0}} \& \\
+			\presentation{S}{R} \rar[swap,pos=0.4]{\exists\unique} \dar[equal] \& H\\[-12pt]
+			F/N
+		\end{tikzcd}
+	\end{center}
+}
+
+\par\noindent
+How to find a presentation for $G$:
+\begin{enumerate}
+	\item Find a set $S$ of generators for $G$, and a set $R$ of relations.
+	\item By the mapping property, we get a natural homomorphism $f:\presentation{S}{R}\to{}G$, which is surjective as $S$ generates $G$.
+	\item Show it's a bijection:
+	\begin{enumerate}
+		\item $\ker(f)=1$
+		\item $\#\presentation{S}{R}\le\#G$ if $\#G<\infty$.
+	\end{enumerate}
+\end{enumerate}
+
+\par\noindent
+Let's carry out this process for $D_{n}$:
+\begin{enumerate}
+	\item $S=\set{a,b}$, $F$ is the free group on symbols $A\leftrightarrow{}a$, $B\leftrightarrow{}b$. $R=\set{A^{n},B^{2},ABAB}$.
+	\item We have a surjection $f:\presentation{S}{R}\to{}D_{N}$ where $A\mapsto{}a,B\mapsto{}b$.
+	\item We will show $\#\presentation{S}{R}\le{}2n$, by showing every element has the form $A^{k}$ or $BA^{k}$ for $0\le{}k<n$.
+\end{enumerate}
+As $A^{n}=1$, $B^{2}=1$, in $\presentation{S}{R}$, every element can be written as $A^{k_{1}}BA^{k_{2}}B\cdots{}A^{k_{l}}$. $A^{k_{n-1}}BA^{k_{n}}=BA^{k_{n}-k_{n-1}}$. If negative, $A^{-k}=A^{n-k}$. So we can simplify to get the result we want.\n
+
+\end{document}

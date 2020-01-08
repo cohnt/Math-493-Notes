@@ -1,0 +1,430 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+
+\usetikzlibrary{bayesnet}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\lemma}[1]{\par\noindent\settowidth{\hangindent}{\textbf{Lemma: }}\textbf{Lemma: }#1}
+\newcommand{\defn}[1]{\par\noindent\settowidth{\hangindent}{\textbf{Defn: }}\textbf{Defn: }#1\n}
+\newcommand{\thm}[1]{\par\noindent\settowidth{\hangindent}{\textbf{Thm: }}\textbf{Thm: }#1\n}
+\newcommand{\prop}[1]{\par\noindent\settowidth{\hangindent}{\textbf{Prop: }}\textbf{Prop: }#1\n}
+\newcommand{\cor}[1]{\par\noindent\settowidth{\hangindent}{\textbf{Cor: }}\textbf{Cor: }#1\n}
+\newcommand{\ex}[1]{\par\noindent\settowidth{\hangindent}{\textbf{Ex: }}\textbf{Ex: }#1\n}
+\newcommand{\exer}[1]{\par\noindent\settowidth{\hangindent}{\textbf{Exer: }}\textbf{Exer: }#1\n}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1)} #2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+
+% Multilinear Algebra
+\newcommand{\Lsym}{\L}
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\uSym}{\u}
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\newcommand{\bSym}{\b}
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\newcommand{\iSym}{\i}
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+\newcommand{\B}{
+    \begin{tikzpicture}
+    \filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+    \draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+    \draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+    \draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+    \end{tikzpicture}
+}
+
+\author{Thomas Cohn}
+\title{Math 493 Lecture 1}
+\date{9/4/2019} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\defn{\!\!\!
+	Let $S$ be a set. A \textbf{composition law} (or \textbf{binary operation}) on $S$ is a function $S\times{}S\overset{f}{\to}S$. We typically write $xy$, $x\cdot{}y$, $x+y$, $x\star{}y$, etc. instead of $f(x,y)$ ($f$ is implicit).
+}
+
+\ex{\!\!\!
+	\begin{itemize}
+		\item $S=\Z$, $x\cdot{}y=x+y$ (usual addition)
+		\item $S=\Z$, $x\cdot{}y=xy$ (usual multiplication)
+		\item $S=\R$, $x\cdot{}y=\frac{x+y}{2}$
+		\item $S=\set{f:X\to{}X}$, $f\cdot{}g=f\of{}g$
+		\item $S=M_{n}(\R)$, i.e., the set of $n\times{}n$ real matrices, with matrix addition or multiplication as the composition law.
+	\end{itemize}
+}
+
+\par\noindent
+This is very general, so it's not much to study.\n
+
+\defn{\!\!\!
+	A composition law is \textbf{associative} if $(x\cdot{}y)\cdot{}z=x\cdot(y\cdot{}z)$, $\forall{}x,y,z\in{}S$.
+}
+
+\par\noindent
+All of the above examples (except the average one) are associative.\n
+
+\par\noindent
+If we have an associative composition law, and $x_{1},\ldots,x_{n}\in{}S$, we can make sense of $x_{1}\cdot{}x_{2}\cdot\ldots\cdot{}x_{n}$. We don't have to have parentheses.\n
+
+\ex{\!\!\!
+	$x_{1}\cdot{}x_{2}\cdot{}x_{3}\cdot{}x_{4}=x_{1}\cdot(x_{2}\cdot(x_{3}\cdot{}x_{4}))=(x_{1}\cdot{}x_{2})\cdot(x_{3}\cdot{}x_{4})=((x_{1}\cdot{}x_{2})\cdot{}x_{3})\cdot{}x_{4}$.
+}
+
+\defn{\!\!\!
+	A composition law is \textbf{commutative} if $x\cdot{}y=y\cdot{}x$, $\forall{}x,y\in{}S$.
+}
+
+\defn{\!\!\!
+	An element $e\in{}S$ is an \textbf{identity} for a composition law if $x\cdot{}e=e\cdot{}x=x$, $\forall{}x\in{}S$. $e$ is often denoted $1$ or $0$ (depending on context).
+}
+
+\par\noindent
+All but the average example above have an identity. If an identity exists, it is unique -- assume $e$ and $e'$ are identity elements. Then $e=e\cdot{}e'=e'$.\n
+
+\defn{\!\!\!
+	Suppose we have an identity element $e\in{}S$, and our composition law is associative. Given $x\in{}S$, we say $y\in{}S$ is an \textbf{inverse} to $x$ if $x\cdot{}y=y\cdot{}x=e$. If such a $y$ exists, we say $x$ is \textbf{invertible}.
+}
+
+\par\noindent
+The inverse to $x$ is unique if it exists. Assume $y$ and $y'$ are inverses of $x$. Then\n
+$yxy'=y(xy')=ye=y$\n
+$yxy'=(yx)y'=ey'=y'$\n
+So $y=y'$.\n
+
+\par\noindent
+We'll denote the inverse of $x$ as $x\inv$ or $-x$ if it exists, depending on context.\n
+
+\prop{\!\!\!
+	Suppose $x$ and $y$ are both invertible. Then so is $xy$, and $(xy)\inv=y\inv{}x\inv$.\n
+	Proof: $(xy)(y\inv{}x\inv)=x(yy\inv)x\inv=xex\inv=xx\inv=e$.\n
+	And $(y\inv{}x\inv)xy=y\inv(x\inv{}x)y=y\inv{}ey=y\inv{}y=e$.\proven
+}
+
+\defn{\!\!\!
+	A \textbf{group} is a pair $(G,\cdot)$ where $G$ is a set and $\cdot$ is a composition law on $G$ \st{}
+	\begin{enumerate}
+		\item $\cdot$ is associative.
+		\item An identity element exists.
+		\item All elements are invertible.
+	\end{enumerate}
+}
+
+\defn{\!\!\!
+	A commutative group is also called an \textbf{abelian group}.
+}
+
+\ex{\!\!\!
+	\begin{itemize}
+		\item $(\Z,+)$ is an abelian group.
+		\item $(\Z,\cdot)$ is not a group.
+		\item $(\Q\cut\set{0},\cdot)$ is an abelian group.
+		\item $X$ set, $S=\set{f:X\to{}X|f\ptxt{ is a bijection}}$. $(S,\of)$ is a group.
+		\item $\GL_{n}(\R)=\set{\ptxt{invertible matrices in }M_{n}(\R)}$ is a group under matrix multiplication.\footnote{$\GL_{n}$ is the \textbf{General Linear Group}.}
+	\end{itemize}
+}
+
+\defn{\!\!\!
+	Let $G$ be a group. A \textbf{subgroup} of $G$ is a subset $H\subset{}G$ \st{}
+	\begin{enumerate}
+		\item $H$ is closed under the composition law, i.e., $x,y\in{}H\Rightarrow{}xy\in{}H$.
+		\item $H$ is closed under inverses, i.e., $x\in{}H\Rightarrow{}x\inv\in{}H$.
+		\item $e\in{}H$ (or equivalently, $H$ is nonemepty).
+	\end{enumerate}
+}
+
+\ex{\!\!\!
+	$G=\Z$. Trivial subgroups $H=\Z$, $H=\set{0}$.\n
+	$H=\set{\ptxt{even integers}}=2\Z\subseteq{}G$ is a subgroup.\n
+	$H=m\Z=\set{\ptxt{all integers divisible by }m}$ is a subgroup.\n
+	$H=\set{n\ge{}0|n\in\Z}$ is \textit{not} a subgroup.
+}
+
+\prop{\!\!\!
+	Every subgroup of $\Z$ is of the form $m\Z$ for some $m\ge{}0$, and if $H\subseteq\Z$ subgroup, $\exists\unique{}m\ge{}0$ \st{} $H=m\Z$.\n
+	Proof: Given $H\subseteq\Z$. If $H=\set{0}$, then $m=0$.\n
+	Assume now that $H\ne\set{0}$. So $\exists{}n\ne{}0$ in $H$. Then either $n$ or $-n$ is positive, and both are in $H$. Let $m$ be the minimal positive integer in $H$.\n
+	Claim: $H=m\Z$. Well, $m\in{}H$ by assumption, so $\forall{}k\ge{}0$, $km\in{}H$. With inverse, we have $m\Z\subseteq{}H$. Suppose we have $n>0\;\in{}H$. We can write $n=qm+r$, with $q,r\ge{}0$, $r<m$. Well, $n,qm\in{}H$, so $r=n+(-qm)\in{}H$. So $r=0$. Thus, $H\subseteq{}m\Z$, so $H=m\Z$.\n
+	If $n<0$, $-n\in{}m\Z$, so $n\in{}m\Z$.\proven
+}
+
+\par\noindent
+Observe: $H,K\subseteq\Z$ subgroups. $H+K=\set{x+y|x\in{}H,y\in{}K}$ is a subgroup.\n
+
+\par\noindent
+Let $n,m>0$. Then $n\Z+m\Z$ is a subgroup of $\Z$. By the definition of subgroups, $\exists\unique{}d>0$ \st{} $n\Z+m\Z=d\Z$. $d$ is in fact the GCD of $n$ and $m$.\n
+
+\defn{\!\!\!
+	Let $G$ be a group, $x\in{}G$. $H=\set{\ldots,x^{-2},x^{-1},x^{0}=e,x^{1},x^{2},\ldots}=\set{x^{n}|n\in\Z}$ is a subgroup of $G$. $H$ is the smallest subgroup of $G$ containing $x$, and it is called the subgroup of $G$ \textbf{generated} by $x$. A group that is generated by a single element is called \textbf{cyclic}.
+}
+
+\par\noindent
+Consider $K=\set{n\in\Z|x^{n}=e}$.\n
+
+\lemma{\!\!\!
+	$K$ is a subgroup of $\Z$.\n
+	Proof:
+	\begin{enumerate}
+		\item $n,m\in{}K\Rightarrow{}x^{n+m}=x^{n}\cdot{}x^{m}=e\cdot{}e=e\Rightarrow{}n+m\in{}K$.
+		\item $n\in{}K\Rightarrow{}x^{-n}=(x^{n})^{-1}=e^{-1}=e\Rightarrow{}-n\in{}K$.
+		\item $0\in{}K$ because $x^{0}=e$.
+	\end{enumerate}
+	\proven
+}
+
+\par\noindent
+Note: $x^{n}=x^{m}$ if and only if $x^{n-m}=e$ if and only if $n-m\in{}K$.\n
+
+\par\noindent
+Two cases:
+\begin{enumerate}
+	\item $K=0$. Then $x^{n}=x^{m}$ if and only if $n=m$, so all pairs of $x$ are distinct, so $H$ is infinite.
+	\item $K\ne{}0$. Then $k=d\Z$, for some $d>0$. $x^{n}=x^{m}$ if and only if $n-m\in{}d\Z$ if and only if\break $n\equiv{}m\pmod{d}$.
+\end{enumerate}
+
+\defn{\!\!\!
+	$G$ is a group. The \textbf{order} of $G$, denoted $\card{G}$ or $\#G$, is the cardinality of $G$.
+}
+
+\defn{\!\!\!
+	$G$ is a group, and $x\in{}G$. The \textbf{order} of $x$, denoted $\ord(x)$, is the order of the subgroup generated by $x$.
+}
+
+\par\noindent
+$\ord(x)=\infty\Leftrightarrow\forall{}n\ne{}0,x^{n}\ne{}e$.\n
+$\ord(x)=d\Leftrightarrow{}x^{d}=e$ and $d$ is minimal.\n
+
+\ex{\!\!\!
+	$G=\GL_{2}(\R)$, $x=\smallBMatrix{1 & 1\\ 0 & 1}$. So $x^{2}=\smallBMatrix{1 & 1\\ 0 & 1}\smallBMatrix{1 & 1\\ 0 & 1}=\smallBMatrix{1 & 2\\ 0 & 1}$, $x^{3}=xx^{2}=\smallBMatrix{1 & 1\\ 0 & 1}\smallBMatrix{1 & 2\\ 0 & 1}=\smallBMatrix{1 & 3\\ 0 & 1}$. $x^{n}=\smallBMatrix{1 & n\\ 0 & 1}$, $\forall{}n\in\Z$.\n
+	$\generated{x}=\set{x^{n}|n\in\Z}=\set{\smallBMatrix{1 & n\\ 0 & 1}\middle|n\in\Z}$.\n
+	$\ord(x)=\infty$.
+}
+
+\ex{\!\!\!
+	$G=\GL_{3}(\R)$. $x=\smallBMatrix{0 & 0 & 1\\ 1 & 0 & 0\\ 0 & 1 & 0}$, $x^{2}=\smallBMatrix{0 & 1 & 0\\ 0 & 0 & 1\\ 1 & 0 & 0}$, $x^{3}=\smallBMatrix{1 & 0 & 0\\ 0 & 1 & 0\\ 0 & 0 & 1}$.\n
+	$\ord(x)=3$.
+}
+
+\end{document}

@@ -1,0 +1,508 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\!\!\!#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1)} #2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+
+% Multilinear Algebra
+\newcommand{\Lsym}{\L}
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\reflectbox{\rotatebox[origin=c]{-90}{$\circlearrowright$}}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\nsubgp}{\vartriangleleft}
+\DeclareMathOperator{\notnsubgp}{\ntriangleleft}
+
+% Convex Optimization
+\newcommand{\sectionSymbol}{\S}
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\uSym}{\u}
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\newcommand{\bSym}{\b}
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\newcommand{\iSym}{\i}
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+\author{Thomas Cohn}
+\title{Math 493 Lecture 16}
+\date{10/30/19} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\section*{Sylow Theorems}
+
+\par\noindent
+Let $G$ be a finite group. Let $p$ be a prime, and write $\card{G}=p^{e}m$, where $p\ndiv{}m$.\n
+
+\defn{
+	A \textbf{$p$-Sylow subgroup} of $G$ is a subgroup of order $p^{e}$.\n
+}
+
+\thm{
+	(First Sylow Theorem) A Sylow subgroup exists, $\forall{}G$, $\forall{}p$.\n
+}
+
+\cor{
+	(Cauchy's Theorem) If $p\mid\card{G}$, then $G$ has an element of order $p$.\n
+	Proof: Let $H$ be a $p$-Sylow subgroup of $H$. $\ord{H}=p^{e}>1$, so let $h\in{}H$ with $h\ne{}1$. Then $\ord(h)\mid\card{H}=p^{e}$, and $\ord(h)\ne{}1$, so $\ord(h)=p^{k}$ for some $k>0$. Thus, $\ord(h^{p^{k-1}})=p$.\proven
+}
+
+\par\noindent
+Observe: Any conjugate of a Sylow subgroup is a Sylow subgroup.\n
+
+\thm{
+	(Second Sylow Theorem) Let $G$ be a group, $H$ a $p$-Sylow subgroup, and let $K$ be any subgroup of $G$. Then $\exists{}H'$ a conjugate of $H$ such that $H'\cap{}K$ is a $p$-Sylow subgroup of $K$.\n
+}
+
+\cor{
+	Any two $p$-Sylow subgroups in $G$ are conjugate.\n
+	Proof: Let $H,K$ be $p$-Sylow subgroups. By the second theorem, there is a conjugate $H'$ of $H$ \st{} $K\cap{}H'$ is a $p$-Sylow subgroup of $K$. Thus, $K\cap{}H'=K$, so $K\subseteq{}H'$. Thus, $K=H'$ (because they're the same order).\proven
+}
+
+\cor{
+	Any subgroup of $G$ that's a $p$-group is contained in some $p$-Sylow subgroup.\n
+	Proof: Let $H$ be a $p$-Sylow subgroup. Let $K$ be a $p$-subgroup. Then there exists a conjugate $H'$ of $H$ \st{} $K\cap{}H'=K$, so $K\subseteq{}H'$ is a $p$-Sylow subgroup.\proven
+}
+
+\thm{
+	(Third Sylow Theorem) Recall: $\card{G}=p^{e}m$. Let $s$ be the number of $p$-Sylow subgroups. Then $s\mid{}m$ and $s\equiv{}1\pmod{p}$.\n
+}
+
+\par\noindent
+Remark: Let $H$ be a $p$-Sylow subgroup of $G$. Then $H$ is a normal subgroup if and only if $s=1$. Can often prove $s=1$ using the third Sylow theorem.\n
+Now, we move on to prove the theorems...\n
+
+\newpage
+
+\section*{First Sylow Theorem Proof}
+
+\par\noindent
+Let $\card{G}=p^{e}m$. let $\mathcal{U}$ be the set of all subsets of $G$ of size $p^{e}$.\n
+$G$ acts on $\mathcal{U}$: given $g\in{}G$, $U\in\mathcal{U}$, $g\cdot{}U=gU=\set{gh\mid{}h\in{}U}$.\n
+
+\prop{
+	$\#\mathcal{U}=\binom{n}{p^{e}}=\frac{n(n-1)(n-2)\cdots(n-p^{e}+1)}{p^{e}(p^{e}-1)\cdots1}$. This is a general fact: the number of $k$-element subsets of a set of size $n$ is $\binom{n}{k}$.\n
+}
+
+\prop{
+	$p\ndiv\#\mathcal{U}$.\n
+	Proof: $\#\mathcal{U}=\frac{n(n-1)\cdots(n-p^{e}+1)}{p^{e}(p^{e}-1)\cdots1}$. If $0\le{}k<p^{e}$, then the power of $p$ dividing $n-k$ is the same as $p^{e}-k$, so the $p$'s in the numerator and denominator cancel in each pair.\n
+	$\#\mathcal{U}=\#O_{1}+\cdots+\#O_{r}$, where the $O_{i}$'s are the orbits of $G$. Since $p\ndiv\#\mathcal{U}$, we must have $p\ndiv\#O_{i}$ for some $i$. Say $O_{i}$ is the orbit of $U\in\mathcal{U}$. Let $H=\stab(u)$. $\forall{}h\in{}H,x\in{}U$, we have $hx\in{}U$, so $U$ contains the coset $Hx$. Thus, $U$ is a union of cosets, so $\#H\mid\#U=p^{e}$. Thus, $\#H=p^{k}$ for some $0\le{}k\le{}e$. By the counting theorem, $\#O_{i}\cdot\#\stab(u)=\#G=p^{e}m$. $\#\stab(u)=\#H=p^{k}$, so $\#O_{i}=p^{e-k}\cdot{}m$. Since $p\ndiv\#O_{u}$, $e=k$, so $H$ is a $p$-Sylow.\proven
+}
+
+\section*{Second Sylow Theorem Proof}
+
+\par\noindent
+Let $G$ be a group, $H\subseteq{}G$ a $p$-Sylow, and $K\subseteq{}G$ some other subgroup. We want to show there's a conjugate of $H$, $H'$, \st{} $H'\cap{}K$ is a $p$-Sylow of $K$.\n
+
+\par\noindent
+Consider the action of $G$ on $G/H$. Recall that the stabilizers for this action are conjugates of $H$.\n
+$\#G/H=m$, so $p\ndiv\#G/H$. Thus, there exists an orbit of $K$ on $G/H$ of cardinality not divisible by $p$. Say its the orbit of $gH$. The stabilizer of $gH$ in $G$ is $H'=gHg\inv$, so the stabilizer in $K$ is $H'\cap{}K$.\n
+
+\par\noindent
+$H'\cap{}K\subseteq{}H'$, so $H'\cap{}K$ is a $p$-group. By the counting formula (for the action of $K$ on $G/H$),\n
+\[
+	\#O_{gH}\cdot\underbrace{\#\stab(gH)}_{H'\cap{}K}=\#K\quad\Rightarrow\quad\#O_{gH}=\frac{\#K}{\#H'\cap{}K}\quad\Rightarrow\quad{}p\ndiv\frac{\#K}{\#H'\cap{}K}\quad\Rightarrow\quad{}H'\cap{}K\ptxt{ is a $p$-Sylow}
+\]
+\proven
+
+\section*{Third Sylow Theorem Proof}
+
+\par\noindent
+Assume $\card{G}=p^{e}m$. Let $s$ be the number of $p$-Sylow subgroups of $G$. We need to show (1) $s\mid{}m$ and (2) $s\equiv{}1\pmod{p}$.\n
+
+\begin{enumerate}[label=(\arabic*)]
+	\item Let $\mathcal{H}=\set{H_{1},\ldots,H_{s}}$ be the set of all $p$-Sylows. $G$ acts on $\mathcal{H}$ by conjugation. This action is transitive by a corollary of the second theorem. Let $H=H_{1}$. What is $\stab(H)$? It's $\set{g\mid{}gHg\inv=H}=N$, called the \textbf{normalizer} of $H$. It's clear that $H\subset{}N$. By the counting formula,
+	\[
+		\#\underbrace{O_{H}}_{\mathcal{H}}\cdot\#\underbrace{\stab_{H}}_{N}=\#G
+	\]
+	So $s=\frac{\#G}{\#N}$, and $\#G=p^{e}m$, and $p^{e}=\#H\mid\#N$, so we conclude $s\mid{}m$.\up\proven
+	\item Think about $H$ acting on $\mathcal{H}$ by conjugation. $H$ fixes $H=H_{1}$. We claim this is the only fixed point.\n
+	Proof: Suppose $H$ fixes $H_{i}$. This implies $H\cdot{}H_{i}$ is a subgroup, because for $ab\in{}HH_{i}$, $a'b'\in{}HH_{i}$, $(ab)(a'b')=\underbrace{(aa')}_{\in{}H}\underbrace{(a')\inv{}ba'b'}_{\in{}H_{i}}$.\n
+	Exercise: $HH_{i}$ is a $p$-group. Since $H\cdot{}H_{i}$ contains $H$, we must have $H=H\cdot{}H_{i}$.\n
+	So $H=H_{i}$, thus $i=1$.\n
+	Now, use the class equation for $H\acts\mathcal{H}$.
+	\begin{itemize}
+		\item $O_{H_{1}}$ has size $1$.
+		\item Every other orbit has size divisible by $1$.
+	\end{itemize}
+	Thus, $s=1\pmod{p}$.\up\proven
+\end{enumerate}
+
+\subsection*{Groups of Order $15$, $21$, $12$}
+
+\prop{
+	Every group of order $15$ is cyclic.\n
+	Proof: Let $H$ be a $3$-Sylow, $K$ be a $5$-Sylow. $H\cong\Z/3\Z$, $K\cong\Z/5\Z$.\n
+	Let $s$ be the number of $3$-Sylow subgroups. By the third Sylow theorem, $s\mid{}5$, so $s=1$ or $s=5$, and $s\equiv{}1\pmod{3}$. We must have $s=1$. Thus, $H$ is the unique $3$-Sylow, so $H$ is normal.\n
+	Let $s'$ be the number of $5$-Sylow subgroups. $s'\mid{}3$, so $s'=1$ or $s'=3$. $s'\equiv{}1\pmod{5}$, so $s'=1$. Thus $K$ is normal.\n
+	\n
+	We claim that $G=HK$. Proof: we know $HK$ is a subgroup, because $H$ is normal, and that it contains $H$ and $K$. Thus, $3,5\mid\#HK$, and $\#HK\mid{}\#G=15$. So $\#HK=15$. Clearly, $H\cap{}K=\set{1}$, because $\#H\cap{}K\mid\gcd(\#H,\#K)=1$. So $G\equiv{}H\times{}K\cong\Z/15\Z$.\proven
+}
+
+\prop{
+	There are $2$ groups of order $21$ up to isomorphism.\n
+	Proof: Let $G$ be a group of order $21=3\cdot{}7$. Let $s$ be the number of $7$-Sylows. By the third theorem, $s\mid{}3$, so $s=1$ or $3$. Because $s\equiv{}1\pmod{7}$, $s=1$. Let $H$ be the unique $7$-Sylow (note that it's normal). Let $K$ be a $3$-Sylow. Just as in the previous proof, we know $G=H\cdot{}K$ and $H\cap{}K=\set{1}$. So $G\cong{}H\rtimes{}K$.\n
+	The structure of the semi-direct product is determined by the action of $K$ on $H$.
+	\[
+		\Z/3\Z\cong{}K\to\Aut(H)=\F_{7}^{\times}\cong\Z/6\Z\overset{\ptxt{CRT}}{\cong}\Z/3\Z\times\Z/2\Z
+	\]
+	Thus, we have two groups of order $21$ (up to isomorphism):
+	\begin{itemize}[leftmargin=4\parindent]
+		\item $\Z/21\Z$
+		\item $\Z/7\Z\rtimes_{\varphi}\Z/3\Z$ where $\varphi:\Z/3\Z\to\Aut(\Z/7\Z)$ is nontrivial.
+	\end{itemize}\up\n
+	\proven
+}
+
+\prop{
+	There are $5$ groups of order $12$ up to isomorphism. These groups are
+	\begin{itemize}[leftmargin=4\parindent]
+		\item $\Z/12\Z=\Z/3\Z\times\Z/4\Z$
+		\item $\Z/6\Z\times\Z/2\Z=\Z/3\Z\times\Z/2\Z\times\Z/2\Z$
+		\item $A_{4}$ (the alternating group)
+		\item $D_{6}$ (the dihedral group)
+		\item One more
+	\end{itemize}\up\n
+	Proof: Let $H$ be a $2$-Sylow, so $H=\Z/4\Z$ or $H=\Z/2\Z\times\Z/2\Z$.\n
+	Let $K$ be a $3$-Sylow, so $K\cong\Z/3\Z$.\n
+	The key claim we will make is that at least one of $H$ or $K$ is normal.\n
+	Proof: Let $s$ be the number of $3$-Sylows. $s\mid{}4$, and $s\equiv{}1\pmod{3}$, so $s=1$ or $s=4$. If $s=1$, then $K$ is normal. \textit{I'm missing the remainder of the proof from my notes.}\n
+	Thus, we have $G=HK$, with $H\cap{}K=\set{1}$. So $G\cong{}H\rtimes{}K$ or $G\cong{}K\rtimes{}H$.\proven
+}
+
+\end{document}

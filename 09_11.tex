@@ -1,0 +1,518 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+
+\usetikzlibrary{bayesnet}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\!\!\!#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1)} #2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+
+% Multilinear Algebra
+\newcommand{\Lsym}{\L}
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\subscriptcycle}[1]{\scaleto{\cycle{#1}}{5pt}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+
+% Convex Optimization
+\newcommand{\sectionSymbol}{\S}
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\uSym}{\u}
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\newcommand{\bSym}{\b}
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\newcommand{\iSym}{\i}
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+\author{Thomas Cohn}
+\title{Math 493 Lecture 3}
+\date{9/11/2019} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\ex{
+	Consider $\det:\GL_{n}(\R)\to\R^{\times}$ ($\R^{\times}$ is the nonzero real numbers under multiplication).\n
+	$\det(AB)=\det(A)\det(B)$, so $\det$ is a group homomorphism.\n
+	$\ker(\det)=\set{A\in\GL_{n}(\R)|\det(A)=1}=\SL_{n}(\R)$, so $\SL_{n}(\R)$ is a normal subgroup of $\GL_{n}(\R)$.\n
+}
+
+\ex{
+	Given $\sigma\in{}S_{n}$, define a linear map $\map{A_{\sigma}:\R^{n}}{\R^{n}}{e_{i}}{e_{\sigma_{i}}}$.\n
+	$A_{\sigma}\in\GL_{n}(\R)$ -- we can check that $A_{\sigma}A_{\tau}=A_{\sigma\tau}$.\n
+	So we have a group homomorphism $\map{A:S_{n}}{\GL_{n}(\R)}{\sigma}{A_{\sigma}}$.\n
+	This is clearly injective, so $A$ is an isomorphism between $S_{n}$ and its image $A(S_{n})\subseteq\GL_{n}(\R)$.
+}
+
+\defn{
+	Matrices of the form $A_{\sigma}$ for some $\sigma\in{}S_{n}$ are called \textbf{permutation matrices}.
+}
+
+\defn{
+	$\map{\sgn:S_{n}}{\set{\pm{}1}}{\sigma}{\det(A_{\sigma})}$.
+}
+
+\ex{
+	$S_{2}=\set{1,\cycle{1 & 2}}$.\n
+	$A_{1}=\smallBMatrix{1 & 0\\ 0 & 1}\quad\det{}A_{1}=1\quad\sgn(1)=1$.\n
+	$A_{\scaleto{\cycle{1 & 2}}{5pt}}=\smallBMatrix{0 & 1\\ 1 & 0}\quad\det{}A_{\scaleto{\cycle{1 & 2}}{5pt}}=-1\quad\sgn(\cycle{1 & 2})=-1$.\n
+}
+
+\ex{
+	$S_{3}=\set{1, \cycle{1 & 2}, \cycle{1 & 3}, \cycle{2 & 3}, \cycle{1 & 2 & 3}, \cycle{1 & 3 & 2}}$.\n
+	$A_{1}=\smallBMatrix{1 & 0 & 0\\ 0 & 1 & 0\\ 0 & 0 & 1}\quad\det{}A_{1}=1\quad\sgn(1)=1$.\n
+	$A_{\subscriptcycle{1 & 2}}=\smallBMatrix{0 & 1 & 0\\ 1 & 0 & 0\\ 0 & 0 & 1}\quad\det{}A_{\subscriptcycle{1 & 2}}=-1\quad\sgn(\cycle{1 & 2})=-1$.\n
+	$A_{\subscriptcycle{1 & 3}}=\smallBMatrix{0 & 0 & 1\\ 0 & 1 & 0\\ 1 & 0 & 0}\quad\det{}A_{\subscriptcycle{1 & 3}}=-1\quad\sgn(\cycle{1 & 3})=-1$.\n
+	$A_{\subscriptcycle{2 & 3}}=\smallBMatrix{1 & 0 & 0\\ 0 & 0 & 1\\ 0 & 1 & 0}\quad\det{}A_{\subscriptcycle{2 & 3}}=-1\quad\sgn(\cycle{2 & 3})=-1$.\n
+	$A_{\subscriptcycle{1 & 2 & 3}}=\smallBMatrix{0 & 0 & 1\\ 1 & 0 & 0\\ 0 & 1 & 0}\quad\det{}A_{\subscriptcycle{1 & 2 & 3}}=1\quad\sgn(\cycle{1 & 2 & 3})=1$.\n
+	$A_{\subscriptcycle{1 & 3 & 2}}=\smallBMatrix{0 & 1 & 0\\ 0 & 0 & 1\\ 1 & 0 & 0}\quad\det{}A_{\subscriptcycle{1 & 3 & 2}}=1\quad\sgn(\cycle{1 & 3 & 2})=1$.\n
+}
+
+\fact{
+	Transpositions generate $S_{n}$.\n
+}
+
+\fact{
+	For any $n$ and any transposition $\sigma\in{}S_{n}$, $\sgn(\sigma)=1$.\n
+	So if $\sigma\in{}S_{n}$, write $\sigma=\tau_{1}\cdots\tau_{m}$, where each $\tau_{i}$ is a transposition.\n
+	Then $\sgn(\sigma)=\sgn(\tau_{1})\cdots\sgn(\tau_{m})$.\n
+}
+
+\defn{
+	$A_{n}=\ker(\sgn:S_{n}\to\set{\pm{}1})$. $A_{n}$ is called the \textbf{alternating group}, and is a normal subgroup of $S_{n}$.\n
+}
+
+\ex{
+	$A_{2}=\set{1}$.\n
+	$A_{3}=\set{1,\cycle{1 & 2 & 3},\cycle{1 & 3 & 2}}$.\n
+	$\#A_{n}=\frac{1}{2}n!$ for $n\ge{}2$.\n
+}
+
+\defn{
+	Let $S$ be a set. An \textbf{equivalence relation} on $S$ is a binary relation $\sim$ \st{}
+	\begin{enumerate}
+		\item Reflexivity: $\forall{}x\in{}S$, $x\sim{}x$.
+		\item Symmetry: $\forall{}x,y\in{}S$, $x\sim{}y\Leftrightarrow{}y\sim{}x$.
+		\item Transitivity: $\forall{}x,y,z\in{}S$, $x\sim{}y\land{}y\sim{}z\Rightarrow{}x\sim{}z$.
+	\end{enumerate}
+}
+
+\ex{
+	\begin{enumerate}
+		\item Define $x\sim{}y$ iff $x=y$.
+		\item Define $x\sim{}y$, $\forall{}x,y$.
+		\item Let $f:S\to{}T$ is a function. Define $x\sim{}y$ iff $f(x)=f(y)$.
+		\item Define an equivalence relation on $\Z$ by $n\sim{}m$ iff $z\divides{}n-m$, ie., $n\equiv{}m\pmod{2}$.\n
+		Note: if we define $f:\Z\to\set{\ptxt{even}, \ptxt{odd}}$, where $f(n)=\ptxt{even}$ if $n$ is even and $f(n)=\ptxt{odd}$ if $n$ is odd, then $f$ induces the above equivalence relation.
+	\end{enumerate}
+}
+
+\defn{
+	Let $S$ be a set with an equivalence relation $\sim$. Let $x\in{}S$.\n
+	The \textbf{equivalence class} of $x$ is $C_{x}=\set{y\in{}S|x\sim{}y}$.
+}
+
+\ex{
+	$S=\Z$, $n\sim{}m$ iff $n\equiv{}m\pmod{2}$.\n
+	$C_{1}=\set{\ldots,-3,-1,1,3,\ldots}$\n
+	$C_{2}=\set{\ldots,-2,0,2,\ldots}$\n
+	$C_{3}=\set{\ldots,-3,-1,1,3,\ldots}$\n
+	$C_{4}=\set{\ldots,-2,0,2,\ldots}$\n
+}
+
+\prop{
+	If two equivalence classes have any common element, they're equal.\n
+	Proof: Suppose $z\in{}C_{x}\cap{}C_{y}$. Let $w\in{}C_{x}$. Then $w\sim{}x\sim{}z\sim{}y$. So $w\sim{}y$, so $w\in{}C_{y}$. Thus, $C_{x}\subseteq{}C_{y}$. A similar argument gives us $C_{y}\subseteq{}C_{x}$, so $C_{x}=C_{y}$.\proven
+}
+
+\defn{
+	Let $S$ be a set. A \textbf{partition} of $S$ is a collection $\mathcal{P}$ of non-empty subsets of $S$ \st{} every element of $S$ belongs to a unique member of $\mathcal{P}$.\n
+}
+
+\par\noindent
+From the previous proposition, we know that a collection of equivalence classes form a partition.\n
+We can reverse this: suppose $\mathcal{P}$ is a partition. Define an equivalence relation on $S$ by $x\sim{}y$ if $x$ and $y$ are in the same element of $\mathcal{P}$.\n
+
+\defn{
+	Let $S$ be a set with an equivalence relation. Define $\overline{S}$ to be the set of equivalence classes. For $x\in{}S$, we'll write $\overline{x}=C_{x}\in\overline{S}$.
+}
+
+\par\noindent
+$\overline{x}=\overline{y}\Leftrightarrow{}x\sim{}y$.\n
+So we can define a function $\map{\pi:S}{\overline{S}}{x}{\overline{x}}$. $x\sim{}y$ iff $\pi(x)=\pi(y)$, so $\sim$ is induced by $\pi$.\n
+
+\ex{
+	$S=\Z$, with $n\sim{}m$ iff $n\equiv{}m\pmod{2}$. Then $\overline{S}=\set{\overline{0},\overline{1}}$.\n
+}
+
+\ex{
+	Let $G$ be a group, $H\subset{}G$ a subgroup. Define an equivalence relation on $G$ by $g\equiv{}g'\pmod{H}$ if $g=g'h$ for some $h\in{}H$ (so $(g')\inv{}g\in{}H$).\n
+	Check:
+	\begin{enumerate}
+		\item Reflexivity: $g=g\cdot{}1$, and $1\in{}H$, So $g\equiv{}g\pmod{H}$.
+		\item Symmetry: if $g\equiv{}g'\pmod{H}$, then $g=g'h$ for some $h\in{}H$. So $g'=gh\inv$.\n Since $h\inv\in{}H$, $g'\equiv{}g\pmod{H}$.
+		\item Transitivity: if $g\equiv{}g'\pmod{H}$ and $g'\equiv{}g''\pmod{H}$, then $g=gh'$ and $g'=g''h'$, for some $h,h'\in{}H$. So $g=(g''h')h=g''(h'h)$. $h'h\in{}H$, so $g\equiv{}g''\pmod{H}$.
+	\end{enumerate}
+}
+
+\ex{
+	$G=\Z$, $H=d\Z$ ($d>0$). $n,m\in\Z$, $n\equiv{}m\pmod{H}$, according to this definition, iff\n $n-m\in{}H\Leftrightarrow{}n\equiv{}m\pmod{d}$.\n
+}
+
+\par\noindent
+What is $\overline{g}=C_{g}$? Well,
+\begin{align*}
+	\overline{g} & =\set{g'\in{}G|g'\equiv{}g\pmod{H}}\\
+	& =\set{g'|\exists{}h\in{}H\ptxt{ st{} }g'=gh}\\
+	& =\set{gh|h\in{}H}\\
+	& =gH
+\end{align*}
+
+\defn{
+	$gH$ is the \textbf{left coset} of $H$ defined by $g$.\n
+}
+
+\par\noindent
+By our previous considerations the left cosets of $H$ form a partition of $G$.\n
+
+\defn{
+	The \textbf{index} of $H$ in $G$ is the number of left cosets, denoted $[G:H]$.\n
+}
+
+\prop{
+	$[G:H]$ is the number of right cosets.\n
+	Proof: $\map{\set{\ptxt{left cosets}}}{\set{\ptxt{right cosets}}}{gH}{Hg\inv}$.\n
+}
+
+\par\noindent
+Observe: For any element $g\in{}G$, $\#(gH)=\#H$.\n
+
+\thm{
+	$\#G=\#H\cdot[G:H]$.\n
+}
+
+\cor{
+	(Lagrange's Theorem) If $\#G$ is finite, then $\#H|\#G$.\n
+}
+
+\cor{
+	If $G$ is finite $g\in{}G$, then $\ord(g)|\#G$.\n
+}
+
+\par\noindent
+Suppose $G$ is a group, $N$ is a normal subgroup. Then for any $g\in{}G$, we have $gN=Ng$, because for $n\in{}N$, $gn=\underbrace{(gng\inv)}_{\in{}N}g\in{}Ng$, so $gN\subseteq{}Ng$. (The other direction follows similarly.)\n
+
+\defn{
+	The \textbf{quotient group} $G/N$ is the set of cosets of $N$, where $(gN)(g'N)=(gg')N$.\n
+}
+
+\end{document}

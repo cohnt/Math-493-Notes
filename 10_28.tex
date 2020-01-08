@@ -1,0 +1,546 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\!\!\!#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1)} #2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+
+% Multilinear Algebra
+\newcommand{\Lsym}{\L}
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\rotatebox[origin=c]{-90}{$\circlearrowright$}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\nsubgp}{\vartriangleleft}
+\DeclareMathOperator{\notnsubgp}{\ntriangleleft}
+
+% Convex Optimization
+\newcommand{\sectionSymbol}{\S}
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\uSym}{\u}
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\newcommand{\bSym}{\b}
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\newcommand{\iSym}{\i}
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+\author{Thomas Cohn}
+\title{Math 493 Lecture 15}
+\date{10/28/19} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\par\noindent
+Let $G$ be a group.\n
+
+\par\noindent
+Recall: for $A,B\subset{}G$ subsets, $AB=\set{ab\mid{}a\in{}A,b\in{}B}$. If $A$ and $B$ are subgroups, then $AB$ is not always a subgroup. However, if $A$ is normal, then $AB$ is a subgroup.\n
+
+\par\noindent
+Recall:
+\defn{
+	$G$ is the \textbf{(internal) direct product} of subgroups $A$ and $B$ if
+	\begin{enumerate}[leftmargin=4\parindent]
+		\item $A$ and $B$ are normal
+		\item $AB=G$
+		\item $A\cap{}B=\set{1}$
+	\end{enumerate}\up\n
+	Notation: $G=A\times{}B$\n
+}
+
+\defn{
+	$G$ is the \textbf{(internal) semi-direct product} of subgroups $A$ and $B$ if
+	\begin{enumerate}[leftmargin=4\parindent]
+		\item $A$ is normal
+		\item $AB=G$
+		\item $A\cap{}B=\set{1}$
+	\end{enumerate}\up\n
+	Notation: $G=A\rtimes{}B$\n
+}
+
+\ex{
+	\begin{enumerate}[leftmargin=4\parindent]
+		\item $G=M$, the group of rigid motions of the plane $P=\R^{2}$.\n
+		$A$ is the group of translations.\n
+		$B$ is $\operatorname{O}(2)$, the group of origin-preserving transformations.\n
+		$G=A\rtimes{}B$.\n
+		\item $G=D_{n}$, the dihedral group of order $2n$.\n
+		$A$ is the group of rotations ($\ord(A)=n$).\n
+		$B$ is the subgroup generated by any reflection.\n
+		$G=A\rtimes{}B$.\n
+		\item $G=\operatorname{O}(n)$.\n
+		$A=\SO(n)$.\n
+		$B$ is the subgroup generated by any reflection.\n
+		$G=A\rtimes{}B$.\n
+		\item $G=A\times{}B$.\n
+		$A=A$.\n
+		$B=B$.\n
+		$G=A\rtimes{}B$. (I.e. every direct product is a semi-direct product.)
+	\end{enumerate}
+}
+
+\par\noindent
+So, among other things, we have $\Z/n\Z\times\Z/2\Z=\Z/n\Z\rtimes\Z/2\Z=D_{n}$. Thus, we cannot recover $G$ from $A$ and $B$ as an abstract group from a semi-direct product.\n
+
+\par\noindent
+Let $X$ be a set. $\Perm(X)$ is the group of permutations of $X$, i.e., the set of all bijections $X\to{}X$, under composition.\n
+$S_{n}=\Perm(\set{1,\ldots,n})$.\n
+
+\par\noindent
+If $X$ is a $G$-set, then for $g\in{}G$, we get a permutation of $X$ by $\map{X}{X}{x}{gx}$.\n
+This defines a function $G\to\Perm(X)$, which is a group homomorphism. In fact, giving an action of $G$ on $X$ is the same as giving a homomorphism $G\to\Perm(X)$.\n
+
+\defn{
+	Now, say $X$ is a group. $\Aut(X)\subseteq\Perm(X)$. If $G$ acts on $X$, we say $G$ \textbf{acts by group homomorphisms} if the map $G\to\Perm(X)$ lands in $\Aut(X)$.\n
+}
+
+\par\noindent
+Explicitly, this means $g\in{}G,x,y\in{}X\Rightarrow{}g\cdot(xy)=(g\cdot{}x)(g\cdot{}y)$.\n
+
+\ex{
+	\begin{enumerate}[leftmargin=4\parindent]
+		\item $G$ acts on itself by left-multiplication. This action \textit{is not} by group homomorphisms.
+		\item $G$ acts on itself by conjugation. This action \textit{is} by group homomorphisms.
+	\end{enumerate}
+}
+
+\par\noindent
+Say $G=A\rtimes{}B$. Given $b\in{}B$, we know that conjugation by $b$ is a group homomorphism $G\to{}G$, and maps $A$ to itself because $A$ is normal. Let
+\[
+	\map{\varphi_{b}:A}{A}{a}{bab\inv}
+\]
+Then $\varphi_{b}\in\Aut(A)$. The function
+\[
+	\map{\varphi:B}{\Aut(A)}{b}{\varphi_{b}}
+\]
+is a group homomorphism. Reason: $\varphi_{bb'}(a)=bb'a(bb')\inv=b(b'a(b')\inv)b\inv=\varphi_{b}(\varphi_{b'}(a))$.\n
+
+\par\noindent
+Note: Every element of $G$ can be written \textit{uniquely} as $ab$ with $a\in{}A$ and $b\in{}B$.\n
+Existence is clear -- we just need to check uniqueness.\n
+Say $ab=a'b'$. Then $1=(a')\inv{}a=b'b\inv\in{}A\cap{}B=\set{1}$. So $a=a'$ and $b=b'$, because inverses are unique.\n
+
+\par\noindent
+To rephrase, the function $\map{A\times{}B}{G}{(a,b)}{ab}$ is a bijection of sets. But in general, it \textit{is not} a group homomorphism.\n
+
+\par\noindent
+How do we multiply elements of $G$ under this description?
+\[
+	(ab)(a'b')=(aba'b\inv)(bb')=(a\varphi_{b}(a'))(bb')
+\]
+
+\defn{
+	$A$ and $B$ are two groups. $\varphi:B\to\Aut(A)$ is a group homomorphism. The \textbf{(external) semi-direct product} of $A$ and $B$ is the set of elements in $A\times{}B$, with multiplication\n
+	$(a,b)(a',b')=(a\varphi_{b}(a'),bb')$. Notation: $G=A\rtimes_{\varphi}B$ (the subscript is optional).\n
+}
+
+\par\noindent
+Suppose $G=A\rtimes{}B$. We've constructed $\varphi:B\to\Aut(A)$.\n
+
+\par\noindent
+From the above discussion, we know $G\cong{}A\rtimes_{\varphi}B$ (external). So internal semi-direct products are external semi-direct products.\n
+
+\par\noindent
+Now, say $G=A\rtimes_{\varphi}B$ (external). Then $\bar{A}=\set{(a,1)\mid{}a\in{}A}$, $\bar{B}=\set{(1,b)\mid{}b\in{}B}$. $\bar{A},\bar{B}\subseteq{}G$. We claim $\bar{A}$ and $\bar{B}$ are subgroups of $G$, and $G$ is the internal semi-direct product.\n
+Proof:\n
+$\bar{A}$ is closed under multiplication: $(a,1)(a',1)=(a\varphi_{1}(a'),1\cdot{}1)=(aa',1)$, because $\varphi_{1}=\Id_{A}$, so $\bar{A}\cong{}A$.\n
+$\bar{B}$ is closed under multiplication: $(1,b)(1,b')=(1\varphi_{b}(1),bb')=(1,bb')$, so $\bar{B}\cong{}B$.\n
+$G=\bar{A}\bar{B}$: $(a,1)(1,b)=(a\varphi_{1}(1),1\cdot{}b)=(a,b)$.\n
+$\bar{A}$ normal: $(1,b)(a,1)(1,b)\inv=(1,b)(a,1)(1,b\inv)=(1,b)(a,b\inv)=(\varphi_{b}(a),bb\inv)=(\varphi_{b}(a),1)\in\bar{A}$.\proven
+
+\ex{
+	Some external semi-direct products:
+	\begin{enumerate}[leftmargin=4\parindent]
+		\item $\varphi:B\to\Aut(A)$ is the trivial homomorphism. Then $\varphi_{b}=\Id_{A}$, $\forall{}b$, so $\varphi_{b}(a)=a$, $\forall{}a,b$.\n
+		Then $(a,b)(a',b')=(a\varphi_{b}(a'),bb')=(aa',bb')$. So we get the direct product $A\times{}B$.\n
+		\item $G=D_{n}$, $A$ is the group of rotations $\generated{\rho_{\frac{2\pi}{n}}}\cong\Z/n\Z$. $B$ is the group generated by some reflection, which is equal to $\generated{r}\cong\Z/2\Z$. We want to understand
+		\[
+			\map{\varphi:B}{\Aut(A)}{1}{\Id_{A}\\ r & \!\!\!\!\mapsto & \!\!\!\!(\rho^{k}\mapsto{}\rho^{-k})}
+		\]
+		Recall, $r\rho^{k}r\inv=\rho^{-k}$, so we have
+		\begin{center}
+			\begin{tikzcd}[ampersand replacement=\&]
+				\&[-25pt] \rho^{k} \& k \arrow[l,mapsto]{}\\[-15pt]
+				\rho^{k} \arrow[d,mapsto]{} \& \generated{\rho} \arrow{d}{\varphi_{r}} \& \Z/n\Z \arrow{l}[swap]{\sim} \arrow{d} \&[-25pt] k \arrow[d,mapsto]{}\\
+				\rho^{-k} \& \generated{\rho} \& \Z/n\Z \arrow{l}[swap]{\sim} \& -k\\
+			\end{tikzcd}
+		\end{center}
+		\item $F$ a field, $A=F^{n}$ (the group of column vectors, under addition). $B=\GL_{n}(F)\subseteq\Aut(A)$. ($B$ consists of $F$-linear automorphisms.)Take $\varphi$ to be inclusion. Explicitly, $\varphi_{b}(a)=ba$ (matrix multiplication).\n
+		$G=A\rtimes_{\varphi}B$: $(a,b)(a',b')=(a+\varphi_{b}(a'),bb')=(a+ba',bb')$ (with vector addition, and matrix multiplication).
+	\end{enumerate}
+}
+
+\par\noindent
+Let $A\nsubgp{}G$ a normal subgroup. Let $A'$ be some nonzero proper $F$-subspace of $A$. $A'\nsubgp{}A$, but $A'\notnsubgp{}G$.\n
+
+\par\noindent
+Question: What is $\Aut(\Z/n\Z)$?\n
+Suppose $\varphi:\Z/n\Z\to\Z/n\Z$ is an automorphism. $\varphi$ is determined by $\varphi(1)$, call this $a\in\Z/n\Z$.\n
+$\varphi(2)=\varphi(1+1)=\varphi(1)+\varphi(1)=a+a=2a$.\n
+$\varphi(3)=\varphi(2+1)=\varphi(2)+\varphi(1)=2a+a=3a$.\n
+In general, $\varphi(k)=ka$ (multiplication modulo $n$). Since $\varphi$ is an automorphism, $\exists{}k$ \st{} $\varphi(k)=1$, so $ka=1$. So $a$ is invertible under multiplication.\n
+
+\defn{
+	We say $a$ is a \textbf{unit} of $\Z/n\Z$.\n
+}
+
+\par\noindent
+$(\Z/n\Z)^{\times}$ is the set of units of $\Z/n\Z$, and it is a group under multiplication.\n
+
+\par\noindent
+Summary: The map $\map{(\Z/n\Z)^{\times}}{\Aut(\Z/n\Z)}{a}{m_{a}=\ptxt{multiplication by }a}$ is an isomorphism of groups.\n
+Note: $m_{a}(m_{b}(x))=a\cdot{}b\cdot{}x=m_{ab}(x)$, so $m_{a}\of{}m_{b}=m_{ab}$, so this is a group homomorphism.)\n
+
+\lemma{
+	If $a\in\Z/n\Z$, then $a$ is a unit iff $\gcd(a,n)=1$.\n
+}
+
+\newpage
+\ex{
+	\begin{itemize}[leftmargin=4\parindent]
+		\item If $n=p$ is prime, $(\Z/n\Z)^{\times}=\F_{p}^{\times}=\F\cut\set{0}$. We've shown this is cyclic, and of order $p-1$.
+		\item $(\Z/4\Z)^{\times}=\set{1,3}\cong\Z/2\Z$.
+		\item $(\Z/6\Z)^{\times}=\set{1,5}\cong\Z/2\Z$.
+		\item $(\Z/8\Z)^{\times}=\set{1,3,5,7}\cong\Z/2\Z\times\Z/2\Z$.
+		\item $(\Z/16\Z)^{\times}\cong\Z/2\Z\times\Z/4\Z$.
+	\end{itemize}
+}
+
+\ex{
+	The last computation implies we have an injective group homomorphism $\varphi:\Z/4\Z\to\Aut(\Z/16\Z)$. We get a semi-direct product $\Z/16\Z\rtimes_{\varphi}\Z/4\Z$.\n
+}
+
+\end{document}

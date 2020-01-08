@@ -1,0 +1,467 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\!\!\!#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1)} #2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+
+% Multilinear Algebra
+\newcommand{\Lsym}{\L}
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+
+% Convex Optimization
+\newcommand{\sectionSymbol}{\S}
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\uSym}{\u}
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\newcommand{\bSym}{\b}
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\newcommand{\iSym}{\i}
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+\author{Thomas Cohn}
+\title{Math 493 Lecture 6}
+\date{9/23/19} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\par\noindent
+Continuing from last time...\n
+
+\par\noindent
+$(1)\Rightarrow(3)$: $S$ is a basis. We need to show no superset of $S$ is linearly independent. Say $x\in{}V\cut{}S$. $S$ spans, so $X=\sum_{i=1}^{n}a_{i}v_{i}$ for some $a_{i}\in{}K$, $v_{i}\in{}S$. So $x-a_{1}v_{1}-a_{2}v_{2}-\cdots-a_{n}v_{n}=0$. Thus, $S\cup\set{x}$ is not linearly independent.\n
+
+\par\noindent
+$(3)\Rightarrow(1)$: $S$ is a maximal linearly independent set. Suppose $S$ did not span. Let $x\not\in\vspan(S)$. Then we claim $S\cup\set{x}$ is linearly independent. Suppose we have $bx+a_{1}v_{1}+\cdots+a_{n}v_{n}=0$, with $a_{i},b\in{}K$, $v_{i}\in{}S$. If $b=0$, then we have a linear relation on the elements of $S$, so $a_{i}=0$, because $S$ is linearly independent. If $b\ne{}0$, then $x=\frac{-1}{b}(a_{1}v_{1}+\cdots+a_{n}v_{n})$, so $x\in\vspan(S)$. Oops!\n
+
+\par\noindent
+\proven
+
+\prop{
+	$V$ is a vector space, $B\subseteq{}V$. Then any maximally independent subset of $B$ spans $B$.\n
+	Proof: Let $S\subset{}B$ be a maximal linearly independent set. Suppose $x\in{}B$ \st{} $x\not\in\vspan(S)$. Then $S\cup\set{x}$ is linearly independent. This contradicts $S$ being a maximal linearly independent subset of $B$.\proven
+}
+
+\lemma{
+	(Zorn's Lemma) Suppose $S$ is a partially ordered set with binary relation $\succeq$ \st{}
+	\begin{enumerate}
+		\item $\succeq$ is reflexive: $x\succeq{}x,\forall{}x\in{}S$.
+		\item $\succeq$ is antisymmetric: $x\succeq{}y,y\succeq{}x\Rightarrow{}x=y,\forall{}x,y\in{}S$.
+		\item $\succeq$ is transitive: $x\succeq{}y,y\succeq{}z\Rightarrow{}x\succeq{}z,\forall{}x,y,z\in{}S$.
+	\end{enumerate}
+	Assume $S\ne\emptyset$ and every chain is bounded, i.e., given $x_{1}\succeq{}x_{2}\succeq\cdots\in{}S$, $\exists{}y\in{}S$ \st{} $x_{i}\succeq{}y,\forall{}i$, then there exists a maximal element $z\in{}X$, i.e., $z\succeq{}x\Rightarrow{}z=x$.\n
+}
+
+\cor{
+	Let $A\subseteq{}B\subseteq{}V$, with $A$ linearly independent and $B$ spanning. Then there is a basis $S$ contained in $B$ which contains $A$.\n
+	Proof: define $X$ to be the set of all independent subsets of $B$ containing $A$.
+	\begin{itemize}
+		\item $X$ is partially ordered by inclusion.
+		\item $X$ is nonempty because $A\in{}X$.
+	\end{itemize}\up\n
+	We will apply Zorn's Lemma, by showing all chains are bounded. Let $C_{1}\subseteq{}C_{2}\subseteq\cdots\in{}X$. We need to prove $\exists{}C\in{}C$ \st{} $C_{i}\subseteq{}C$, $\forall{}i$.\n
+	Take $C=\bigcup_{i\ge{}1}C_{i}\subseteq{}B$. We need to show $C$ is linearly independent. Suppose $a_{n}x_{1}+\cdots+a_{n}x_{n}$ is a linear relation with $x_{i}\in{}C$. Then $\exists{}m$ \st{} $x_{1},\ldots,x_{n}\in{}C_{m}$. So the relation is trivial, because $C_{m}\in{}X$, so $C$ bounds the independent sets.\n
+	Thus, by Zorn's Lemma, there is a maximal element of $X$.\proven
+}
+
+\cor{
+	If $A\subseteq{}V$ is any independent set, there is a basis containing $A$.\n
+	Proof: take $B=V$.\proven
+}
+
+\cor{
+	If $B\subseteq{}V$ is any spanning set, there is a basis contained in $B$.\n
+	Proof: Take $A=\emptyset$.\proven
+}
+
+\prop{
+	(Basis Exchange Lemma) $V$ vector space, $B$ basis of $V$, $C$ spanning set of $V$. Given $x\in{}B$, $\exists{}y\in{}C$ \st{} $(B\cut\set{x})\cup\set{y}$ is a basis.\n
+	Proof: $B\cut\set{x}$ is not maximally independent, but is independent. So it must not span.\n
+	So $C\not\subset\vspan(B\cut\set{x})$ (if we did have containment, then we'd have $\vspan(C)\subseteq\vspan(B\cut\set{x})$). So $\exists{}y\in{}C$ \st{} $y\not\in\vspan(B\cut\set{x})$. We need to show $B'=(B\cut\set{x})\cup\set{y}$ is a basis, because $y\in\vspan(B)$, $y=a_{1}z_{1}+\cdots+a_{n}z_{n}$ with $z_{i}\in{}B$.\n
+	\n
+	Must have $z_{i}=x$, $a_{i}\ne{}0$, for some $i$. Say $i=1$ WOLOG (otherwise, $y\in\vspan(B\cut\set{x})$). $y=a_{1}x+a_{2}z_{2}+\cdots+a_{n}z_{n}$. $x\in\vspan(B')$, because $x=\frac{1}{a}(y-a_{1}z_{1}-a_{2}z_{2}-\cdots-a_{n}z_{n})\in\vspan(B')$.\n
+	\n
+	$B\cut\set{x}\subseteq\vspan(B')\Rightarrow{}B\subseteq\vspan(B)'$. So $V=\vspan(B)\subseteq\vspan(B')$, and thus, $B'$ spans $V$.\n
+	\n
+	Claim: $B'$ is independent. Consider a linear relation $cy+d_{1}v_{1}+\cdots+d_{m}v_{m}=0$, with $c,d_{i}\in{}K$, $v_{1},\ldots,v_{m}\in{}B\cut\set{x}$.
+	\begin{enumerate}[label=Case{\arabic*}: ,leftmargin=5\parindent]
+		\item $c=0$. Then this is a relation between elements of $B\cut\set{x}$, which we know to be independent. So each $d_{i}=0$.
+		\item $c\ne{}0$. Then $c(a_{1}x+a_{2}z_{2}+\cdots+a_{n}z_{n})+d_{1}v_{1}+\cdots=d_{m}v_{m}=0$. This is a linear relation between elements of $B$. So the coefficients must all be $0$.
+	\end{enumerate}\up\n
+	Therefore, $B'$ is a basis.\proven
+}
+
+\defn{
+	A vector space $V$ is \textbf{finite dimensional} if it has a finite spanning set.\n
+}
+
+\thm{
+	(Dimension Theorem) Suppose $V$ is a finite dimensional vector space. Then all bases are finite and have the same size.\n
+	Proof: Note that, by definition, $V$ has a finite spanning set. This contains a basis, so there exists a finite basis.\n
+	Say $B=\set{x_{1},\ldots,x_{n}}$ is a basis. $C$ is some other basis. Define $B_{0}=B$. Given $B_{k}$, define $B_{k+1}$ by replacing $x_{k}\in{}B_{k}$ with something from $C$, while maintaining it as a basis.\n
+	Thus, $B_{k}\subseteq{}C$, so $C=B_{k}$. We have $\#C=\#B_{k}=\#B_{0}=\#B$.\proven
+}
+
+\defn{
+	Suppose $V$ is finite dimensional. Then we say the \textbf{dimension} of $V$, denoted $\dim{}V$, to be the size of a basis.\n
+}
+
+\ex{
+	$V=K^{n}$. For $1\le{}i\le{}n$, let $e_{i}$ be the vector of zeros, with $1$ in the $i$th position. $\set{e_{1},\ldots,e_{n}}$ forms a basis of $V$, so $\dim{}V=n$.\n
+}
+
+\ex{
+	$V$ is the set of all polynomials in $X$ with coefficients in $K$. This is not finite dimensional.\n
+}
+
+\ex{
+	Let $V$ be the set of all polynomials of degree $\le{}d$. Then $\set{1,x,x^{2},\ldots,x^{n}}$ is a basis, so $\dim{}V=n+1$.\n
+}
+
+\par\noindent
+Let $V$ be a vector space, and let $W$ be a subspace. We can then form $V/W$, the quotient space.
+\begin{itemize}
+	\item As an abelian group, it's the usual quotient group.
+	\item Given $a\in{}K$, $v\in{}V$, define $a(v\cdot{}W)=av+W$. Check that this is well defined:\n
+	Suppose $v+W=v'+W$. Then $v-v'\in{}W$, so $a(v-v')=av-av'\in{}W$. Thus, $av+W=av'+W$.
+\end{itemize}
+
+\par\noindent
+We have the quotient map $\map{\pi:V}{V/W}{v}{\bar{v}=v+W}$.\n
+This is a linear map, because it is a group homomorphism and compatible with scalar multiplication.\n
+
+\prop{
+	Let $V$ be a finite dimensional vector space, and $W\subseteq{}V$ a subspace. Then $W$ and $V/W$ are finite dimensional, and $\dim{}V=\dim{}W+\dim{}V/W$.\n
+	Proof: Let $S$ be a basis for $W$. We can extend $S$ to be a basis $T$ of $V$. Thus, $T$ (and $S$) are finite. $S=\set{x_{1},\ldots,x_{n}}$. $T=\set{x_{1},\ldots,x_{n},y_{1},\ldots,y_{m}}$. So $\dim{}W=n$, $\dim{}V=n+m$.\n
+	\n
+	We claim $\bar{y}_{1},\ldots,\bar{y}_{m}$ form a basis of $V/W$. Let $\bar{v}\in{}V/W$. We can write\n
+	$v=a_{1}x_{1}+\cdots+a_{n}x_{n}+b_{1}y_{1}+\cdots+b_{m}y_{m}$. Apply $\pi$, so $\bar{v}=b_{1}\bar{y}_{1}+\cdots+b_{m}\bar{y}_{m}$. Thus, $\bar{y}_{1},\ldots,\bar{y}_{m}$ spans.\n
+	Say $b_{1}\bar{y}_{1}+\cdots+b_{m}\bar{y}_{m}=0$. Consider $b_{1}y_{1}+\cdots+b_{m}y_{m}\in\ker(\pi)=W$. This is equal to $a_{1}x_{1}+\cdots+a_{n}x_{n}$ for some $a_{1},\ldots,a_{n}$. So $-a_{1}x_{1}-\cdots-a_{n}x_{n}+b_{1}y_{1}+\cdots+b_{m}y_{m}=0$. So all coefficients are $0$, so $\bar{y}_{1},\ldots,\bar{y}_{m}$ are linearly independent.\n
+	Therefore, they're a basis.\proven
+}
+
+\end{document}

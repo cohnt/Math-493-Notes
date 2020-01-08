@@ -1,0 +1,548 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[intlimits]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{arydshln}
+\usepackage{tensor}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[boxed]{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{listings}
+\usepackage{textcomp}
+% \usepackage[pdf,tmpdir,singlefile]{graphviz}
+\usepackage{mathrsfs}
+\usepackage{bbm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{enumitem}
+\usepackage{arydshln}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{scalerel}
+
+\usetikzlibrary{bayesnet}
+\setlist{noitemsep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\n}{\hfill\break}
+\newcommand{\up}{\vspace{-\baselineskip}}
+\newcommand{\hangblock}[2]{\par\noindent\settowidth{\hangindent}{\textbf{#1: }}\textbf{#1: }\!\!\!#2}
+\newcommand{\lemma}[1]{\hangblock{Lemma}{#1}}
+\newcommand{\defn}[1]{\hangblock{Defn}{#1}}
+\newcommand{\thm}[1]{\hangblock{Thm}{#1}}
+\newcommand{\cor}[1]{\hangblock{Cor}{#1}}
+\newcommand{\prop}[1]{\hangblock{Prop}{#1}}
+\newcommand{\ex}[1]{\hangblock{Ex}{#1}}
+\newcommand{\exer}[1]{\hangblock{Exer}{#1}}
+\newcommand{\fact}[1]{\hangblock{Fact}{#1}}
+\newcommand{\remark}[1]{\hangblock{Remark}{#1}}
+\newcommand{\proven}{\;$\square$\n}
+\newcommand{\problem}[1]{\par\noindent{#1}\n}
+\newcommand{\problempart}[2]{\par\noindent\indent{}\settowidth{\hangindent}{\textbf{(#1)} \indent{}}\textbf{(#1) }\!\!\!#2\n}
+\newcommand{\ptxt}[1]{\textrm{\textnormal{#1}}}
+\newcommand{\inlineeq}[1]{\centerline{$\displaystyle #1$}}
+\newcommand{\pageline}{\up\par\noindent\rule{\textwidth}{0.1pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Math commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Theory
+\newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\setmid}{\;\middle|\;}
+\newcommand{\ps}[1]{\mathcal{P}\left(#1\right)}
+\newcommand{\pfinite}[1]{\mathcal{P}^{\ptxt{finite}}\left(#1\right)}
+\newcommand{\naturals}{\mathbb{N}}
+\newcommand{\N}{\naturals}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\Z}{\integers}
+\newcommand{\rationals}{\mathbb{Q}}
+\newcommand{\Q}{\rationals}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\R}{\reals}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\C}{\complex}
+\newcommand{\halfPlane}{\mathbb{H}}
+\let\H\relax
+\newcommand{\H}{\halfPlane}
+\newcommand{\comp}{^{\complement}}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\Ind}{\mathbbm{1}}
+\newcommand{\cut}{\setminus}
+\DeclareMathOperator{\elem}{elem}
+
+% Graph Theory
+\let\deg\relax
+\DeclareMathOperator{\deg}{deg}
+\newcommand{\degp}{\ptxt{deg}^{+}}
+\newcommand{\degn}{\ptxt{deg}^{-}}
+\newcommand{\precdot}{\mathrel{\ooalign{$\prec$\cr\hidewidth\hbox{$\cdot\mkern0.5mu$}\cr}}}
+\newcommand{\succdot}{\mathrel{\ooalign{$\cdot\mkern0.5mu$\cr\hidewidth\hbox{$\succ$}\cr\phantom{$\succ$}}}}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\affdim}{affdim}
+
+% Probability
+\newcommand{\parSymbol}{\P}
+\newcommand{\Prob}{\mathbb{P}}
+\renewcommand{\P}{\Prob}
+\newcommand{\Avg}{\mathbb{E}}
+\newcommand{\E}{\Avg}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\Unif}{Unif}
+\DeclareMathOperator{\Binom}{Binom}
+\newcommand{\CI}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+
+% Standard Math
+\newcommand{\inv}{^{-1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\ceil}[1]{\left\lceil{}#1\right\rceil{}}
+\newcommand{\floor}[1]{\left\lfloor{}#1\right\rfloor{}}
+\newcommand{\conj}[1]{\overline{#1}}
+\newcommand{\of}{\circ}
+\newcommand{\tri}{\triangle}
+\newcommand{\inj}{\hookrightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\ndiv}{\nmid}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\divides}{\mid}
+\newcommand{\ndivides}{\nmid}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\map}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\to & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\bigsum}[2]{\smashoperator[lr]{\sum_{\scalebox{#1}{$#2$}}}}
+
+% Linear Algebra
+\newcommand{\Id}{\textrm{\textnormal{Id}}}
+\newcommand{\im}{\textrm{\textnormal{im}}}
+\newcommand{\norm}[1]{\abs{\abs{#1}}}
+\newcommand{\tpose}{^{T}\!}
+\newcommand{\iprod}[1]{\left<#1\right>}
+\newcommand{\giprod}{\iprod{\;\,,\;}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{tr}
+\newcommand{\chgBasMat}[3]{\!\!\tensor*[_{#1}]{\left[#2\right]}{_{#3}}}
+\newcommand{\vecBas}[2]{\tensor*[]{\left[#1\right]}{_{#2}}}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\vspan}{span}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\V}[1]{\vec{#1}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\compProj}{comp}
+\DeclareMathOperator{\row}{row}
+\newcommand{\smallPMatrix}[1]{\paren{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\smallBMatrix}[1]{\brack{\begin{smallmatrix}#1\end{smallmatrix}}}
+\newcommand{\pmat}[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand{\bmat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+
+% Multilinear Algebra
+\newcommand{\Lsym}{\L}
+\let\L\relax
+\DeclareMathOperator{\L}{\mathscr{L}}
+\DeclareMathOperator{\A}{\mathcal{A}}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\newcommand{\ot}{\otimes}
+\newcommand{\ox}{\otimes}
+\DeclareMathOperator{\asc}{asc}
+\DeclareMathOperator{\asSet}{set}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator{\ringA}{\mathring{A}}
+
+% Topology
+\newcommand{\closure}[1]{\overline{#1}}
+\newcommand{\uball}{\mathcal{U}}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Bd}{Bd}
+\DeclareMathOperator{\rInt}{rInt}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\ah}{ah}
+\newcommand{\LargerTau}{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\tau}}}}}
+\newcommand{\Tau}{\mathcal{T}}
+
+% Analysis
+\DeclareMathOperator{\Graph}{Graph}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator{\hypo}{hypo}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\lint}[2]{\underset{#1}{\overset{#2}{{\color{black}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\uint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{black}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\alignint}[2]{\underset{#1}{\overset{#2}{{\color{white}\underline{{\color{white}\overline{{\color{black}\int}}\color{black}}}}}}}
+\newcommand{\extint}{\ptxt{ext}\int}
+\newcommand{\extalignint}[2]{\ptxt{ext}\alignint{#1}{#2}}
+\newcommand{\conv}{\ast}
+\newcommand{\pd}[2]{\frac{\partial{}#1}{\partial{}#2}}
+\newcommand{\del}{\nabla}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\curl}{curl}
+\let\div\relax
+\DeclareMathOperator{\div}{div}
+\DeclareMathOperator{\vol}{vol}
+
+% Complex Analysis
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Res}{Res}
+
+% Abstract Algebra
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\generated}[1]{\left<#1\right>}
+\newcommand{\cycle}[1]{\smallPMatrix{#1}}
+\newcommand{\id}{\ptxt{id}}
+\newcommand{\iso}{\cong}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\op}{op}
+\newcommand{\isom}[4]{\!\!\!\begin{array}[t]{rcl}#1 & \!\!\!\!\overset{\sim}{\to} & \!\!\!\!#2\\ #3 & \!\!\!\!\mapsto & \!\!\!\!#4\end{array}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\acts}{\;\reflectbox{\rotatebox[origin=c]{-90}{$\circlearrowright$}}\;}
+\newcommand{\disjunion}{\mathrel{\text{\scalebox{1.07}{$\perp\mkern-10mu\perp$}}}}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\stab}{stab}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\Perm}{Perm}
+\DeclareMathOperator{\nsubgp}{\vartriangleleft}
+\DeclareMathOperator{\notnsubgp}{\ntriangleleft}
+\newcommand{\presentation}[2]{\left<#1\;\middle|\;#2\right>}
+\DeclareMathOperator{\Char}{char}
+
+% Convex Optimization
+\newcommand{\sectionSymbol}{\S}
+\let\S\relax
+\newcommand{\S}{\mathbb{S}}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\ones}{\mathbbm{1}}
+\newcommand{\minimizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\maximizeOver}[3]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\\ \ptxt{subject to} & #3\end{array}}
+\newcommand{\minimizationProblem}[2]{\minimizeOver{}{#1}{#2}}
+\newcommand{\maximizationProblem}[2]{\maximizeOver{}{#1}{#2}}
+\newcommand{\minimizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{minimize}} & #2\end{array}}
+\newcommand{\maximizeOverUnconstrained}[2]{\begin{array}{rl}\underset{#1}{\ptxt{maximize}} & #2\end{array}}
+\newcommand{\minimizationUnconstrained}[1]{\minimizeOverUnconstrained{}{#1}}
+\newcommand{\maximizationUnconstrained}[1]{\maximizeOverUnconstrained{}{#1}}
+
+% Proofs
+\newcommand{\st}{s.t.}
+\newcommand{\unique}{!}
+\newcommand{\iffdef}{\overset{\ptxt{def}}{\Leftrightarrow}}
+\newcommand{\eqdef}{\overset{\ptxt{def}}{=}}
+\newcommand{\eqVertical}{\rotatebox[origin=c]{90}{=}}
+\newcommand{\mapsfrom}{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+\newcommand{\mapsdown}{\rotatebox[origin=c]{-90}{$\mapsto$}\mkern2mu}
+\newcommand{\mapsup}{\rotatebox[origin=c]{90}{$\mapsto$}\mkern2mu}
+\newcommand{\from}{\!\mathrel{\reflectbox{\ensuremath{\to}}}}
+
+% Brackets
+\newcommand{\paren}[1]{\left(#1\right)}
+\renewcommand{\brack}[1]{\left[#1\right]}
+\renewcommand{\brace}[1]{\left\{#1\right\}}
+\newcommand{\ang}[1]{\left<#1\right>}
+
+% Algorithms
+\algrenewcommand{\algorithmiccomment}[1]{\hskip 1em \texttt{// #1}}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\newcommand{\algP}{\ptxt{\textbf{P}}}
+\newcommand{\algNP}{\ptxt{\textbf{NP}}}
+\newcommand{\algNPC}{\ptxt{\textbf{NP-Complete}}}
+\newcommand{\algNPH}{\ptxt{\textbf{NP-Hard}}}
+\newcommand{\algEXP}{\ptxt{\textbf{EXP}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\flag}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\uSym}{\u}
+\let\u\relax
+\newcommand{\u}[1]{\underline{#1}}
+\newcommand{\bSym}{\b}
+\let\b\relax
+\newcommand{\b}[1]{\textbf{#1}}
+\newcommand{\iSym}{\i}
+\let\i\relax
+\newcommand{\i}[1]{\textit{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make l's curvy in math environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mathcode`l="8000
+\begingroup
+\makeatletter
+\lccode`\~=`\l
+\DeclareMathSymbol{\lsb@l}{\mathalpha}{letters}{`l}
+\lowercase{\gdef~{\ifnum\the\mathgroup=\m@ne \ell \else \lsb@l \fi}}%
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fix \vdots and \ddots %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{letltxmacro}
+\LetLtxMacro\orgvdots\vdots
+\LetLtxMacro\orgddots\ddots
+
+\makeatletter
+\DeclareRobustCommand\vdots{%
+	\mathpalette\@vdots{}%
+}
+\newcommand*{\@vdots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\copy2 \vfill\copy2 \vfill\copy2 %
+		}%
+	}%
+}
+\DeclareRobustCommand\ddots{%
+	\mathinner{%
+		\mathpalette\@ddots{}%
+		\mkern\thinmuskip
+	}%
+}
+\newcommand*{\@ddots}[2]{%
+	% #1: math style
+	% #2: unused
+	\sbox0{$#1\cdotp\cdotp\cdotp\m@th$}%
+	\sbox2{$#1.\m@th$}%
+	\vbox{%
+		\dimen@=\wd0 %
+		\advance\dimen@ -3\ht2 %
+		\kern.5\dimen@
+		% remove side bearings
+		\dimen@=\wd2 %
+		\advance\dimen@ -\ht2 %
+		\dimen2=\wd0 %
+		\advance\dimen2 -\dimen@
+		\vbox to \dimen2{%
+			\offinterlineskip
+			\hbox{$#1\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+			\vfill
+			\hbox{$#1\mathpunct{\kern\wd2}\mathpunct{\kern\wd2}\mathpunct{.}\m@th$}%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\B}{
+	\begin{tikzpicture}
+	\filldraw [fill=red, draw=black] (0, 0) rectangle (0.37, 0.45);
+	\draw [line width=0.5mm, white ] (0.1,0.08) -- (0.1,0.38);
+	\draw[line width=0.5mm, white ] (0.1, 0.35) .. controls (0.2, 0.35) and (0.4, 0.2625) .. (0.1, 0.225);
+	\draw[line width=0.5mm, white ] (0.1, 0.225) .. controls (0.2, 0.225) and (0.4, 0.1625) .. (0.1, 0.1);
+	\end{tikzpicture}
+}
+
+\author{Thomas Cohn}
+\title{Math 493 Lecture 19}
+\date{11/11/19} % Can also use \today
+
+\begin{document}
+\maketitle
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+
+\section*{Bilinear Forms}
+
+\par\noindent
+Recall the dot product.\n
+Given $v,w\in\R^{n}$, $v=\smallBMatrix{v_{1}\\ \vdots\\ v_{n}},w=\smallBMatrix{w_{1}\\ \vdots\\ w_{n}}$, then their dot product is $v\cdot{}w=v_{1}w_{1}+\cdots+v_{n}w_{n}$.\n
+
+\par\noindent
+The dot product has three important properties:
+\begin{enumerate}
+	\item Bilinearity: $(\alpha{}v+\beta{}v')\cdot{}w=\alpha(v\cdot{}w)+\beta(v'\cdot{}w)$ for $\alpha,\beta\in\R,v,v',w\in\R^{n}$ (and similarly in the second argument)
+	\item Symmetry: $v\cdot{}w=w\cdot{}v$
+	\item Positive Definite: $v\ne{}0\Rightarrow{}v\cdot{}v>0$
+\end{enumerate}
+We want to generalize the dot product to arbitrary vector spaces, and understand what that looks like.\n
+
+\par\noindent
+Some setup: Let $F$ be a field with $\Char(F)\ne{}2$ (i.e. $2\ne{}0$, $1\ne-1$). Let $V$ be a $F$-vector space with finite dimension.\n
+
+\defn{
+	A \textbf{bilinear form} on $V$ is a function $\giprod:V\times{}V\to{}F$ \st{}
+	\begin{itemize}[itemsep=0pt, topsep=0pt, label=-, leftmargin=4\parindent]
+		\item $\iprod{\alpha{}v+\beta{}v',w}=\alpha\iprod{v,w}+\beta\iprod{v',w}$, $\forall\alpha,\beta\in{}F,v,v',w\in{}V$
+		\item $\iprod{v,\alpha{}w+\beta{}w'}=\alpha\iprod{v,w}+\beta\iprod{v,w'}$, $\forall\alpha,\beta\in{}F,v,w,w'\in{}V$
+	\end{itemize}\up\n
+}
+
+\defn{
+	A bilinear form $\giprod$ is said to be
+	\begin{itemize}[itemsep=0pt, topsep=0pt, label=-, leftmargin=4\parindent]
+		\item \textbf{symmetric} if $\iprod{v,w}=\iprod{w,v}$, $\forall{}v,w\in{}V$
+		\item \textbf{antisymmetric} if $\iprod{v,w}=-\iprod{w,v}$, $\forall{}v,w\in{}V$
+	\end{itemize}\up\n
+}
+
+\ex{
+	\begin{enumerate}[topsep=0pt]
+		\item $V=\R^{n}$, $\iprod{v,w}=v\cdot{}w$ is symmetric.
+		\item $V=\ptxt{anything}$, $\iprod{v,w}=0$, $\forall{}v,w\in{}V$ is symmetric and antisymmetric.
+		\item $V=F^{n}$, $\iprod{v,w}=v_{1}w_{1}+\cdots+v_{n}w_{n}$ is symmetric.
+		\item $V=F^{n}$, pick $\alpha_{1},\ldots,\alpha_{n}\in{}F^{n}$, $\iprod{v,w}=\alpha_{1}v_{1}w_{1}+\cdots+\alpha_{n}v_{n}w_{n}$ is symmetric.
+		\item $V=F^{2}$, $\iprod{v,w}=\det\smallBMatrix{v_{1} & w_{1}\\ v_{2} & w_{n}}$ is antisymmetric.
+	\end{enumerate}\up\n
+}
+
+\par\noindent
+Let $\giprod$ be a bilinear form on $V$, $e_{1},\ldots,e_{n}$ be a basis of $V$. Let $a_{i,j}=\iprod{e_{i},e_{j}}$.\n
+Given $v=v_{1}e_{1}+\cdots+v_{n}e_{n},w=w_{1}e_{1}+\cdots+w_{n}e_{n}$ (for $v_{i},w_{i}\in{}F$), we have
+\[
+	\iprod{v,w}=\sum_{i,j=1}^{n}v_{i}w_{j}\iprod{e_{i},e_{j}}=\sum_{i,j=1}^{n}a_{i,j}v_{i}w_{j}
+\]
+If $n=2$, then this becomes $\smallBMatrix{v_{1} & v_{2}}\smallBMatrix{a_{1,1} & a_{1,2}\\ a_{2,1} & a_{2,2}}\smallBMatrix{w_{1}\\ w_{2}}$.\n
+
+\par\noindent
+This works in general. Let $A=[a_{i,j}]_{1\le{}i,j\le{}n}$, an $n\times{}n$ matrix. Then $\iprod{v,w}=[v]_{\mathfrak{B}}\tpose{}A[w]_{\mathfrak{B}}$ (where $[v]_{\mathfrak{B}}$ is the vector $v$ in the $\mathfrak{B}=(e_{1},\ldots,e_{n})$ basis).\n
+
+\par\noindent
+Note: $\giprod$ is symmetric iff $A$ is symmetric, i.e., $A\tpose=A$. $\giprod$ is antisymmetric iff $A\tpose=-A$.\n
+
+\par\noindent
+Change of basis: Say $\mathfrak{C}=(f_{1},\ldots,f_{n})$ is a second basis. Let $Q\in\GL_{n}(F)$ be the change of basis matrix, so $[v]_{\mathfrak{B}}=Q[v]_{\mathfrak{C}}$.\n
+
+\par\noindent
+Let $A$ be the matrix for $\giprod$ with respect to the $\mathfrak{B}$ basis. $A_{i,j}=\iprod{e_{i},e_{j}}$.\n
+Let $A'$ be the matrix for $\giprod$ with respect to the $\mathfrak{C}$ basis. $A'_{i,j}=\iprod{f_{i},f_{j}}$.\n
+Then
+\[
+	\iprod{v,w}=[v]_{\mathfrak{B}}\tpose{}A[w]_{\mathfrak{B}}=[v]_{\mathfrak{C}}\tpose{}A'[w]_{\mathfrak{C}}=(Q[v]_{\mathfrak{B}})\tpose{}A'(Q[w]_{\mathfrak{B}})=[v]_{\mathfrak{B}}\tpose(Q\tpose{}A'Q)[w]_{\mathfrak{B}}
+\]
+So $[v]_{\mathfrak{B}}\tpose{}A[w]_{\mathfrak{B}}=[v]_{\mathfrak{B}}\tpose(Q\tpose{}A'Q)[w]_{\mathfrak{B}}$, $\forall{}v,w\in{}V$. So we have $a\tpose{}Ab=a\tpose(Q\tpose{}A'A)b$, $\forall{}a,b\in{}F^{n}$, and thus, $A=Q\tpose{}A'Q$ (we can take $a$ and $b$ to be the standard basis vectors $e_{i},e_{j}$, then $a\tpose{}Ab=A_{i,j}$). We've just proved:\n
+
+\prop{
+	Let $\giprod$ be a bilinear form on $V$. Let $A$ be the matrix of $\giprod$ in some basis. Then the matrix in an arbitrary basis has the form $Q\tpose{}AQ$ for $Q\in\GL_{n}(F)$.\n
+}
+
+\par\noindent
+From now on, focus on the case where the bilinear form is symmetric.\n
+
+\defn{
+	A \textbf{quadratic space} is a pair $(V,\giprod)$ where $V$ is a finite dimensional $F$-vector space and $\giprod$ is a symmetric bilinear form on $V$.\n
+}
+
+\defn{
+	Let $V,W$ be quadratic spaces. An \textbf{isometry} from $V$ to $W$ is a linear isomorphism $T:V\to{}W$ such that $\iprod{Tv,Tv'}=\iprod{v,v'}$, $\forall{}v,v'\in{}V$.\n
+}
+
+\par\noindent
+Problem: classify quadratic spaces up to isometry.
+\[
+	\set{\ptxt{$n$-dimensional quadratic spaces}}/\,\ptxt{isometry}\cong\set{\ptxt{$n\times{}n$ symmetric matrices}}/\sim
+\]
+where $A\sim{}B$ if $A=Q\tpose{}BQ$ for some $Q\in\GL_{n}(F)$. Reason:
+\begin{itemize}[itemsep=0pt, topsep=0pt, label=-]
+	\item Given a quadratic spaces $V$, we get the elements of $M_{n}(F)/\sim$ by taking matrix of form (?)
+	\item If $T:V\to{}W$ is an isometry, let $e_{1},\ldots,e_{n}$ be a basis for $V$. Then $Te_{1},\ldots,Te_{n}$ is a basis for $W$. Because $T$ is an isometry, $\iprod{Te_{i},Te_{j}}=\iprod{e_{i},e_{j}}$, which tells us that the matrices are the same.
+\end{itemize}
+
+\subsection*{Invariants of Quadratic Spaces}
+
+\begin{itemize}
+	\item Dimension of $V$ -- not a complete invariant. Consider $I_{n}$ and $0_{n}$ (matrix of zeros). These are not equivalent.
+	\item Discriminant: Let $A,B\in{}M_{n}(F)$ \st{} $A\sim{}B$. Then $\exists{}Q\in\GL_{n}(F)$ \st{} $A=Q\tpose{}BQ$, so $\det{}A=(\det{}Q)^{2}\det{}B$, so $\det(A)=\det(B)$ in $F/(F^{\times})^{2}=\set{0}\cup{}F^{\times}/(F^{\times})^{2}$.
+\end{itemize}
+
+\defn{
+	The \textbf{discriminant} of a bilinear form or a quadratic spaces is the determinant of the matrix as an element of $F/(F^{\times})^{2}$.\n
+}
+
+\par\noindent
+Note: It's well-defined!\n
+
+\ex{
+	$F=\Q$, $V=\Q^{2}$, $p$ is a prime.
+	\begin{enumerate}[leftmargin=4\parindent]
+		\item $\iprod{v,w}=v_{1}w_{1}+v_{2}w_{2}$ has matrix $\smallBMatrix{1 & 0\\ 0 & 1}$, so the discriminant is $1$.
+		\item $(v,w)=v_{1}w_{1}+pv_{2}w_{2}$ has matrix $\smallBMatrix{1 & 0\\ 0 & p}$, so the discriminant is $p$.
+	\end{enumerate}\up\n
+}
+
+\par\noindent
+$p\ne{}1$ on $\Q^{\times}/(\Q^{\times})^{2}$, so $(V,\giprod)$ and $(V,(\;\,,\;))$ are not isometric.\n
+
+\par\noindent
+Another invariant: Let $V$ be a quadratic space. The \textbf{kernel} of $V$ is $\set{v\in{}V\mid{}\iprod{v,w}=0,\forall{}w\in{}V}$. This is a subspace of $V$, and $\dim\ker(V)$ is an invariant.\n
+
+\defn{
+	Let $V$ be a quadratic space, and let $a\in{}F$. We say $V$ \textbf{represents} $a$ if $\exists{}v\in{}V\cut\set{0}$ \st{} $\iprod{v,v}=a$.\n
+}
+The set of all elements of $F$ represented by $V$ is an isometry invariant of $V$.\n
+
+\ex{
+	$F=\R$, $V=\R^{2}$, $\iprod{v,w}=v\cdot{}w=v_{1}w_{1}+v_{2}w_{2}$, $(v,w)=v_{1}w_{1}-v_{2}w_{2}$. Then $(V,\giprod)$ represents positive real numbers, but $(V,(\;\,,\;))$ represents all real numbers. So they're not isometric.\n
+}
+
+\defn{
+	Let $V$ and $W$ be quadratic spaces. Their \textbf{orthogonal direct sum} is $V\perp{}W$.
+	\begin{itemize}[topsep=0pt, leftmargin=4\parindent]
+		\item The vector space is $V\oplus{}W$.
+		\item The form is $\iprod{v+w,v'+w'}=\iprod{v,v'}+\iprod{w,w'}$ for $v,v'\in{}V,w,w'\in{}W$.
+	\end{itemize}\up\n
+}
+
+\par\noindent
+If $V$ is a quadratic space, and $U,W\subseteq{}V$ are subspaces, then $V=U\perp{}W$ if $V=U\oplus{}W$ and they're orthogonal, i.e., $\forall{}u\in{}U,w\in{}W$, $\iprod{u,w}=0$.\n
+
+\lemma{
+	Let $V$ be a quadratic space \st{} $\giprod\ne{}0$. Then $\exists{}v\in{}V$ \st{} $\iprod{v,v}\ne{}0$.\n
+	Proof: By the assumption, $\exists{}u,w\in{}V$ \st{} $\iprod{u,w}\ne{}0$. If $\iprod{u,u}\ne{}0$ or $\iprod{w,w}\ne{}0$, we're done. If $\iprod{u,u}=\iprod{w,w}=0$, then compute
+	\[
+		\iprod{u+w,u+w}=\cancel{\iprod{u,u}}+\iprod{u,w}+\iprod{w,u}+\cancel{\iprod{w,w}}=2\iprod{u,w}=2\iprod{u,w}\ne{}0
+	\]
+	\proven
+}
+
+\defn{
+	Let $V$ be a quadratic space, and $W\subseteq{}V$ a subspace. Define $W^{\perp}=\set{v\in{}V\mid{}\iprod{v,w}=0,\forall{}w\in{}W}$.\n
+}
+
+\par\noindent
+By our lemma, if $\giprod\ne{}0$, then $\exists{}v$ \st{} $v\not\in(Fv)^{\perp}=(\vspan(v))^{\perp}$.\n
+Assume $\giprod\ne{}0$. Pick $v$ \st{} $\iprod{v,v}\ne{}0$. Then $\vspan(v)^{\perp}=\ker\paren{\begin{array}{l}V\to{}F\\ w\mapsto\iprod{v,w}\end{array}}$.\n
+So $\dim(\vspan(v)^{\perp})=\dim{}V-1$, so $\dim(\vspan(v))=1$, so $\vspan(v)\cap\vspan(v)^{\perp}=\set{0}$.\n
+Thus, $V=\vspan(v)\perp\vspan(v)^{\perp}$, and we conclude that if $\giprod\ne0$, then we have a $V\cong{}L\perp{}V'$, where $\dim(L)=1$ and $\dim(V')=\dim(V)-1$. This conclusion is obvious if $\giprod=0$ also.\n
+
+\par\noindent
+By induction on $\dim{}V=n$, we can find $L_{1},\ldots,L_{n}$, each dimension $1$ quadratic spaces, such that\n
+$V\cong{}L_{1}\perp\cdots\perp{}L_{n}$.\n
+
+\par\noindent
+Alternative statement 1: Given a quadratic space $V$, there is an orthogonal basis $e_{1},\ldots,e_{n}$ where\n
+$\iprod{e_{i},e_{j}}=0$ if $i\ne{}j$.\n
+
+\par\noindent
+Alternative statement 2: Given an $n\times{}n$ symmetric matrix $A$, $\exists{}Q\in\GL_{n}(F)$ \st{} $Q\tpose{}AQ$ is diagonal.\n
+
+
+\end{document}
